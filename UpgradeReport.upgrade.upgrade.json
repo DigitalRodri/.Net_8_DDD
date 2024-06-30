@@ -1,0 +1,595 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": true
+    },
+    "targetId": "",
+    "targetDisplayName": ".NET 8.0"
+  },
+  "analysisStartTime": "2024-06-29T21:22:24.6377495Z",
+  "analysisEndTime": "2024-06-29T21:22:47.5480019Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 4,
+      "issues": 6,
+      "incidents": 34,
+      "effort": 34
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 25,
+        "Optional": 1,
+        "Potential": 8,
+        "Information": 0
+      },
+      "category": {
+        "NuGet": 25,
+        "Project": 8,
+        "Api": 1
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "Application\\Application.csproj",
+      "startingProject": true,
+      "issues": 5,
+      "storyPoints": 23,
+      "ruleInstances": [
+        {
+          "incidentId": "d8a5a37d-f285-451f-b554-eb9b859ba771",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Antlr, 3.5.0.2\n\nRecommendation:\n\nAntlr4 4.6.6",
+            "protectedSnippet": "Antlr, 3.5.0.2\n\nRecommendation:\n\nAntlr4 4.6.6",
+            "label": "Antlr 3.5.0.2"
+          }
+        },
+        {
+          "incidentId": "99cc6bd0-308a-48a1-82d4-9777f585249e",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "EntityFramework, 6.5.1\n\nRecommendation:\n\nEntityFramework 6.4.4",
+            "protectedSnippet": "EntityFramework, 6.5.1\n\nRecommendation:\n\nEntityFramework 6.4.4",
+            "label": "EntityFramework 6.5.1"
+          }
+        },
+        {
+          "incidentId": "d3413a56-6637-49a0-bd01-cc5118bd1738",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.Mvc, 5.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "Microsoft.AspNet.Mvc, 5.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "Microsoft.AspNet.Mvc 5.2.9"
+          }
+        },
+        {
+          "incidentId": "ae2130d5-0fff-49e9-b97d-1cde50bc6115",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.Razor, 3.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "Microsoft.AspNet.Razor, 3.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "Microsoft.AspNet.Razor 3.2.9"
+          }
+        },
+        {
+          "incidentId": "9f523863-a504-46f8-81ea-fdac0eb63f04",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.Web.Optimization, 1.1.3\n\nRecommendation:\n\nNo supported version found",
+            "protectedSnippet": "Microsoft.AspNet.Web.Optimization, 1.1.3\n\nRecommendation:\n\nNo supported version found",
+            "label": "Microsoft.AspNet.Web.Optimization 1.1.3"
+          }
+        },
+        {
+          "incidentId": "3ac1b45a-52a1-481d-83e5-8790d2381c28",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.WebApi, 5.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "Microsoft.AspNet.WebApi, 5.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "Microsoft.AspNet.WebApi 5.2.9"
+          }
+        },
+        {
+          "incidentId": "6910d3c3-3d57-4d6c-a53d-85266ff46231",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.WebApi.Core, 5.2.9\n\nRecommendation:\n\nNo supported version found",
+            "protectedSnippet": "Microsoft.AspNet.WebApi.Core, 5.2.9\n\nRecommendation:\n\nNo supported version found",
+            "label": "Microsoft.AspNet.WebApi.Core 5.2.9"
+          }
+        },
+        {
+          "incidentId": "a25fefcc-66f4-499c-b4e5-f78a62cf0844",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.WebApi.WebHost, 5.2.9\n\nRecommendation:\n\nNo supported version found",
+            "protectedSnippet": "Microsoft.AspNet.WebApi.WebHost, 5.2.9\n\nRecommendation:\n\nNo supported version found",
+            "label": "Microsoft.AspNet.WebApi.WebHost 5.2.9"
+          }
+        },
+        {
+          "incidentId": "025d041a-850b-4f7b-9ba6-bf8407741a9d",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.AspNet.WebPages, 3.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "Microsoft.AspNet.WebPages, 3.2.9\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "Microsoft.AspNet.WebPages 3.2.9"
+          }
+        },
+        {
+          "incidentId": "17abdebd-ad14-4923-9528-b6bc772e3c20",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.Bcl.AsyncInterfaces, 1.1.0\n\nRecommendation:\n\nMicrosoft.Bcl.AsyncInterfaces 8.0.0",
+            "protectedSnippet": "Microsoft.Bcl.AsyncInterfaces, 1.1.0\n\nRecommendation:\n\nMicrosoft.Bcl.AsyncInterfaces 8.0.0",
+            "label": "Microsoft.Bcl.AsyncInterfaces 1.1.0"
+          }
+        },
+        {
+          "incidentId": "c5cb9449-2101-4171-8477-8db04f6e40df",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.CodeDom.Providers.DotNetCompilerPlatform, 2.0.1\n\nRecommendation:\n\nNo supported version found",
+            "protectedSnippet": "Microsoft.CodeDom.Providers.DotNetCompilerPlatform, 2.0.1\n\nRecommendation:\n\nNo supported version found",
+            "label": "Microsoft.CodeDom.Providers.DotNetCompilerPlatform 2.0.1"
+          }
+        },
+        {
+          "incidentId": "9731d630-b494-4c10-aed1-8f1b07aee632",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Microsoft.Web.Infrastructure, 2.0.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "Microsoft.Web.Infrastructure, 2.0.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "Microsoft.Web.Infrastructure 2.0.0"
+          }
+        },
+        {
+          "incidentId": "e2c39a14-abce-4942-b474-25f5badf8d36",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Buffers, 4.5.1\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Buffers, 4.5.1\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Buffers 4.5.1"
+          }
+        },
+        {
+          "incidentId": "3af2c207-e197-451b-84fd-366570cf60cb",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Memory, 4.5.5\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Memory, 4.5.5\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Memory 4.5.5"
+          }
+        },
+        {
+          "incidentId": "3a837359-2595-4b37-9a96-bb0ccc70863f",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Numerics.Vectors, 4.5.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Numerics.Vectors, 4.5.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Numerics.Vectors 4.5.0"
+          }
+        },
+        {
+          "incidentId": "bac7e29e-de8d-4aff-bfc8-d3b971a91735",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Runtime.CompilerServices.Unsafe, 4.7.1\n\nRecommendation:\n\nSystem.Runtime.CompilerServices.Unsafe 6.0.0",
+            "protectedSnippet": "System.Runtime.CompilerServices.Unsafe, 4.7.1\n\nRecommendation:\n\nSystem.Runtime.CompilerServices.Unsafe 6.0.0",
+            "label": "System.Runtime.CompilerServices.Unsafe 4.7.1"
+          }
+        },
+        {
+          "incidentId": "2c1fc22f-6803-4b31-90f7-4fb4d5c18aca",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Text.Encodings.Web, 4.7.2\n\nRecommendation:\n\nSystem.Text.Encodings.Web 8.0.0",
+            "protectedSnippet": "System.Text.Encodings.Web, 4.7.2\n\nRecommendation:\n\nSystem.Text.Encodings.Web 8.0.0",
+            "label": "System.Text.Encodings.Web 4.7.2"
+          }
+        },
+        {
+          "incidentId": "3f7db995-1e9d-4a83-8d8f-240b17d754bc",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Text.Json, 4.7.2\n\nRecommendation:\n\nSystem.Text.Json 8.0.3",
+            "protectedSnippet": "System.Text.Json, 4.7.2\n\nRecommendation:\n\nSystem.Text.Json 8.0.3",
+            "label": "System.Text.Json 4.7.2"
+          }
+        },
+        {
+          "incidentId": "8c50b224-37fa-49c3-8da8-19b98df05a4d",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.Threading.Tasks.Extensions, 4.5.4\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.Threading.Tasks.Extensions, 4.5.4\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.Threading.Tasks.Extensions 4.5.4"
+          }
+        },
+        {
+          "incidentId": "39fa673e-a667-4fa4-b43b-adf006b263e6",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "System.ValueTuple, 4.5.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.ValueTuple, 4.5.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.ValueTuple 4.5.0"
+          }
+        },
+        {
+          "incidentId": "086cb35c-e6de-426b-a5e1-c6c0f922a69d",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Unity.WebAPI, 5.4.0\n\nRecommendation:\n\nNo supported version found",
+            "protectedSnippet": "Unity.WebAPI, 5.4.0\n\nRecommendation:\n\nNo supported version found",
+            "label": "Unity.WebAPI 5.4.0"
+          }
+        },
+        {
+          "incidentId": "bbcb1de0-54ad-4518-87b5-6c019accbb7a",
+          "ruleId": "Project.0001",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj"
+          }
+        },
+        {
+          "incidentId": "8dbd2804-afde-4359-8a4d-2f9c7a0ed3ec",
+          "ruleId": "Project.0002",
+          "projectPath": "Application\\Application.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Application\\Application.csproj",
+            "snippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0",
+            "protectedSnippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Domain\\Domain.csproj",
+      "startingProject": true,
+      "issues": 4,
+      "storyPoints": 4,
+      "ruleInstances": [
+        {
+          "incidentId": "3cbb1657-3633-4453-b460-8ed1a9612a5a",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Domain\\Domain.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Domain\\Domain.csproj",
+            "snippet": "System.ComponentModel, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "System.ComponentModel, 4.3.0\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "System.ComponentModel 4.3.0"
+          }
+        },
+        {
+          "incidentId": "11d5cc72-3361-4eab-86ab-aa8559e3069a",
+          "ruleId": "Project.0001",
+          "projectPath": "Domain\\Domain.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Domain\\Domain.csproj"
+          }
+        },
+        {
+          "incidentId": "8faecc53-a47a-4661-ae20-dbb4bc3654de",
+          "ruleId": "Project.0002",
+          "projectPath": "Domain\\Domain.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Domain\\Domain.csproj",
+            "snippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0",
+            "protectedSnippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0"
+          }
+        },
+        {
+          "incidentId": "e301d938-c14e-4ef4-8b7a-d485c2fbb8b9",
+          "ruleId": "Api.0003",
+          "description": "Derived cryptographic types are obsolete. Use the Create method on the base type instead.",
+          "projectPath": "Domain\\Domain.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Domain\\Services\\AccountService.cs",
+            "snippet": "return new SHA256Managed().ComputeHash(saltedValue);",
+            "protectedSnippet": "T:System.Security.Cryptography.SHA256Managed",
+            "label": "T:System.Security.Cryptography.SHA256Managed",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://learn.microsoft.com/dotnet/api/system.security.cryptography.sha256managed",
+                "isCustom": false
+              },
+              {
+                "title": "https://aka.ms/dotnet-warnings/SYSLIB0021",
+                "url": "https://aka.ms/dotnet-warnings/SYSLIB0021",
+                "isCustom": true
+              }
+            ],
+            "line": 114,
+            "column": 12
+          }
+        }
+      ]
+    },
+    {
+      "path": "Infraestructure\\Infraestructure.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 3,
+      "ruleInstances": [
+        {
+          "incidentId": "839c785e-3c95-4450-b586-bd9e8c359041",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Infraestructure\\Infraestructure.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Infraestructure\\Infraestructure.csproj",
+            "snippet": "EntityFramework, 6.5.1\n\nRecommendation:\n\nEntityFramework 6.4.4",
+            "protectedSnippet": "EntityFramework, 6.5.1\n\nRecommendation:\n\nEntityFramework 6.4.4",
+            "label": "EntityFramework 6.5.1"
+          }
+        },
+        {
+          "incidentId": "947575df-0573-44d5-bdc4-3492194df135",
+          "ruleId": "Project.0001",
+          "projectPath": "Infraestructure\\Infraestructure.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Infraestructure\\Infraestructure.csproj"
+          }
+        },
+        {
+          "incidentId": "687852e1-2c5f-45af-ad23-4b7a38481282",
+          "ruleId": "Project.0002",
+          "projectPath": "Infraestructure\\Infraestructure.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Infraestructure\\Infraestructure.csproj",
+            "snippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0",
+            "protectedSnippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0"
+          }
+        }
+      ]
+    },
+    {
+      "path": "Testing\\Testing.csproj",
+      "startingProject": true,
+      "issues": 4,
+      "storyPoints": 4,
+      "ruleInstances": [
+        {
+          "incidentId": "9ebd4409-261f-476b-a6b3-0b00e1fbb3cf",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Testing\\Testing.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Testing\\Testing.csproj",
+            "snippet": "EntityFramework, 6.4.0\n\nRecommendation:\n\nEntityFramework 6.4.4",
+            "protectedSnippet": "EntityFramework, 6.4.0\n\nRecommendation:\n\nEntityFramework 6.4.4",
+            "label": "EntityFramework 6.4.0"
+          }
+        },
+        {
+          "incidentId": "7a087933-cc6c-44c7-94d6-95c385f9037d",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Testing\\Testing.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Testing\\Testing.csproj",
+            "snippet": "Moq, 4.2.1409.1722\n\nRecommendation:\n\nMoq, 4.20.70",
+            "protectedSnippet": "Moq, 4.2.1409.1722\n\nRecommendation:\n\nMoq, 4.20.70",
+            "label": "Moq 4.2.1409.1722"
+          }
+        },
+        {
+          "incidentId": "570aa971-f1be-4b7d-94d2-791efd5e6fb4",
+          "ruleId": "Project.0001",
+          "projectPath": "Testing\\Testing.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Testing\\Testing.csproj"
+          }
+        },
+        {
+          "incidentId": "c9b2943f-263c-48f9-a8c6-67b00888ae48",
+          "ruleId": "Project.0002",
+          "projectPath": "Testing\\Testing.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "Testing\\Testing.csproj",
+            "snippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0",
+            "protectedSnippet": "Current: .NETFramework,Version=v4.8.1\nNew: net8.0"
+          }
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "NuGet.0003": {
+      "id": "NuGet.0003",
+      "description": "NuGet package functionality is included with framework refrence.\n\nPackage needs to be removed.",
+      "label": "NuGet package functionality is included with framework refrence",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262609",
+          "isCustom": false
+        }
+      ]
+    },
+    "Project.0001": {
+      "id": "Project.0001",
+      "description": "Project file needs to be converted to SDK style. Modern .NET framework projects require a change in the project file format and use SDK corresponding to project flavor and functionality.",
+      "label": "Project file needs to be converted to SDK style",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Overview of porting from .NET Framework to .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET project SDKs",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "Project.0002": {
+      "id": "Project.0002",
+      "description": "Project\u0027s target framework(s) needs to be changed to the new target framework that you selected for this upgrade.\n\nDuring upgrade target framework will be adjusted to correspinding platform when applicable. In some cases project would result in multiple target frameworks after the upgrade if it was using features that now have their own platforms in moderrn .NET frameworks (windows, iOS, Android etc).",
+      "label": "Project\u0027s target framework(s) needs to be changed",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Overview of porting from .NET Framework to .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET project SDKs",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0003": {
+      "id": "Api.0003",
+      "description": "API is obsolete.",
+      "label": "API is obsolete",
+      "severity": "Optional",
+      "effort": 1
+    },
+    "NuGet.0002": {
+      "id": "NuGet.0002",
+      "description": "NuGet package upgrade is recommended for selected target framework.\n\nStandard .NET packages are recommended to have versions matching version of .NET that project targets.\n\nSome other packages also are known to work better for selected target frameworks.",
+      "label": "NuGet package upgrade is recommended",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262530",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0001": {
+      "id": "NuGet.0001",
+      "description": "NuGet package is incompatible with selected target framework.\n\nPackage needs to be upgraded to a version supporting selected project target framework. If there no new package versions supporting new target framework, different package needs to be used and all code needs to be upgraded to new API.",
+      "label": "NuGet package is incompatible",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262529",
+          "isCustom": false
+        }
+      ]
+    }
+  }
+}

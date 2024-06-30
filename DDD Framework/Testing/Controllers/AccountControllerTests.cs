@@ -7,7 +7,6 @@ using System;
 using System.Data;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
 using Testing.Helpers;
 
 namespace Testing.Services
