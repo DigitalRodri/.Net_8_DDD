@@ -15,6 +15,7 @@ Contains:
 * GUID and creation/modification dates generated directly in SQL
 * JWT Authentication with Authorization tag
 * Unit testing
+* Centralized package versioning
 
 Designed with Microsoft guidelines: 
 * https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/net-core-microservice-domain-model
