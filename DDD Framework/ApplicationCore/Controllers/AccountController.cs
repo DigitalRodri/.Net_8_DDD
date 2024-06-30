@@ -1,6 +1,7 @@
 ﻿using Domain.DTOs;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
@@ -26,7 +27,7 @@ namespace Application.Controllers
                 AccountDto accountDTO = _accountService.GetAccount(UUID);
 
                 if (accountDTO == null) return NoContent();
-                return accountDTO; 
+                return Ok(accountDTO);
             }
             catch (ArgumentException ex)
             {
@@ -44,7 +45,7 @@ namespace Application.Controllers
             try
             {
                 AccountDto accountDTO = _accountService.CreateAccount(simpleAccountDto);
-                return accountDTO;
+                return Created(new Uri(Request.GetEncodedUrl() + "/" + accountDTO.UUID), accountDTO);
             }
             catch (ArgumentException ex)
             {
@@ -66,7 +67,7 @@ namespace Application.Controllers
             try
             {
                 AccountDto modifiedAccount = _accountService.UpdateAccount(UUID, updateAccountDto);
-                return modifiedAccount;
+                return Ok(modifiedAccount);
             }
             catch (ArgumentException ex)
             {

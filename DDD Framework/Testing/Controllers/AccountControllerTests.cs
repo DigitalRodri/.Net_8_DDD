@@ -1,12 +1,14 @@
 using Application.Controllers;
 using Domain.DTOs;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Data;
 using System.Net;
-using System.Net.Http;
 using Testing.Helpers;
 
 namespace Testing.Services
@@ -16,6 +18,9 @@ namespace Testing.Services
     {
         private AccountController _accountController;
         private Mock<IAccountService> _accountService;
+        private Mock<HttpRequest> _httpRequest;
+        private HttpContext _httpContext;
+        private ControllerContext _controllerContext;
 
         private Guid _id;
         private AccountDto _accountDto;
@@ -27,12 +32,17 @@ namespace Testing.Services
         [TestInitialize]
         public void Init() 
         {
-
-
             _accountService = new Mock<IAccountService>();
-            _accountController = new AccountController(_accountService.Object);
-            _accountController.Request = new HttpRequestMessage();
-            _accountController.Request.SetConfiguration(new HttpConfiguration());
+            _httpRequest = new Mock<HttpRequest>();
+
+            _httpRequest.Setup(x => x.Scheme).Returns("http");
+            _httpRequest.Setup(x => x.Host).Returns(HostString.FromUriComponent("localhost:8080"));
+            _httpRequest.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
+
+            _httpContext = Mock.Of<HttpContext>(x => x.Request == _httpRequest.Object);
+            _controllerContext = new ControllerContext(){ HttpContext = _httpContext };
+
+            _accountController = new AccountController(_accountService.Object) { ControllerContext = _controllerContext };
 
             _id = Guid.NewGuid();
             _accountDto = ObjectHelper.GetAccountDto();
@@ -48,29 +58,32 @@ namespace Testing.Services
         public void GetAccount_Success()
         {
             _accountService.Setup(x => x.GetAccount(It.IsAny<Guid>())).Returns(_accountDto);
-            HttpResponseMessage result = _accountController.GetAccount(_id);
+            ActionResult<AccountDto> result = _accountController.GetAccount(_id);
 
-            result.TryGetContentValue<AccountDto>(out AccountDto accountResult);
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-            Assert.AreEqual(_accountDto.UUID, accountResult.UUID);
+            OkObjectResult objectResult = result.Result as OkObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+            AccountDto accountDtoResult = objectResult.Value as AccountDto;
+            Assert.AreEqual(_accountDto.UUID, accountDtoResult.UUID);
         }
 
         [TestMethod]
         public void GetAccount_ArgumentException()
         {
             _accountService.Setup(x => x.GetAccount(It.IsAny<Guid>())).Throws(_argumentException);
-            HttpResponseMessage result = _accountController.GetAccount(_id);
+            ActionResult<AccountDto> result = _accountController.GetAccount(_id);
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            BadRequestObjectResult objectResult = result.Result as BadRequestObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
         }
 
         [TestMethod]
         public void GetAccount_Exception()
         {
             _accountService.Setup(x => x.GetAccount(It.IsAny<Guid>())).Throws(new Exception());
-            HttpResponseMessage result = _accountController.GetAccount(_id);
+            ActionResult<AccountDto> result = _accountController.GetAccount(_id);
 
-            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, objectResult.StatusCode);
         }
 
         #endregion
@@ -81,38 +94,42 @@ namespace Testing.Services
         public void CreateAccount_Success()
         {
             _accountService.Setup(x => x.CreateAccount(It.IsAny<SimpleAccountDto>())).Returns(_accountDto);
-            HttpResponseMessage result = _accountController.CreateAccount(_simpleAccountDto);
+            ActionResult<AccountDto> result = _accountController.CreateAccount(_simpleAccountDto);
 
-            result.TryGetContentValue<AccountDto>(out AccountDto accountResult);
-            Assert.AreEqual(HttpStatusCode.Created, result.StatusCode);
-            Assert.AreEqual(_accountDto.UUID, accountResult.UUID);
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.Created, objectResult.StatusCode);
+            AccountDto accountDtoResult = objectResult.Value as AccountDto;
+            Assert.AreEqual(_accountDto.UUID, accountDtoResult.UUID);
         }
 
         [TestMethod]
         public void CreateAccount_ArgumentException()
         {
             _accountService.Setup(x => x.CreateAccount(It.IsAny<SimpleAccountDto>())).Throws(_argumentException);
-            HttpResponseMessage result = _accountController.CreateAccount(_simpleAccountDto);
+            ActionResult<AccountDto> result = _accountController.CreateAccount(_simpleAccountDto);
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            BadRequestObjectResult objectResult = result.Result as BadRequestObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
         }
 
         [TestMethod]
         public void CreateAccount_DuplicateNameException()
         {
             _accountService.Setup(x => x.CreateAccount(It.IsAny<SimpleAccountDto>())).Throws(_duplicateNameException);
-            HttpResponseMessage result = _accountController.CreateAccount(_simpleAccountDto);
+            ActionResult<AccountDto> result = _accountController.CreateAccount(_simpleAccountDto);
 
-            Assert.AreEqual(HttpStatusCode.Conflict, result.StatusCode);
+            ConflictObjectResult statusCode = result.Result as ConflictObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.Conflict, statusCode.StatusCode);
         }
 
         [TestMethod]
         public void CreateAccount_Exception()
         {
             _accountService.Setup(x => x.CreateAccount(It.IsAny<SimpleAccountDto>())).Throws(new Exception());
-            HttpResponseMessage result = _accountController.CreateAccount(_simpleAccountDto);
+            ActionResult<AccountDto> result = _accountController.CreateAccount(_simpleAccountDto);
 
-            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, objectResult.StatusCode);
         }
 
         #endregion
@@ -123,29 +140,31 @@ namespace Testing.Services
         public void UpdateAccount_Success()
         {
             _accountService.Setup(x => x.UpdateAccount(It.IsAny<Guid>(), It.IsAny<UpdateAccountDto>())).Returns(_accountDto);
-            HttpResponseMessage result = _accountController.UpdateAccount(_id, _updateAccountDto);
+            ActionResult<AccountDto> result = _accountController.UpdateAccount(_id, _updateAccountDto);
 
-            result.TryGetContentValue<AccountDto>(out AccountDto accountResult);
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-            Assert.AreEqual(_accountDto.UUID, accountResult.UUID);
+            OkObjectResult objectResult = result.Result as OkObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+            AccountDto accountDtoResult = objectResult.Value as AccountDto;
+            Assert.AreEqual(_accountDto.UUID, accountDtoResult.UUID);
         }
 
         [TestMethod]
         public void UpdateAccount_ArgumentException()
         {
             _accountService.Setup(x => x.UpdateAccount(It.IsAny<Guid>(), It.IsAny<UpdateAccountDto>())).Throws(_argumentException);
-            HttpResponseMessage result = _accountController.UpdateAccount(_id, _updateAccountDto);
-
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            ActionResult<AccountDto> result = _accountController.UpdateAccount(_id, _updateAccountDto);
+            BadRequestObjectResult objectResult = result.Result as BadRequestObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
         }
 
         [TestMethod]
         public void UpdateAccount_Exception()
         {
             _accountService.Setup(x => x.UpdateAccount(It.IsAny<Guid>(), It.IsAny<UpdateAccountDto>())).Throws(new Exception());
-            HttpResponseMessage result = _accountController.UpdateAccount(_id, _updateAccountDto);
+            ActionResult<AccountDto> result = _accountController.UpdateAccount(_id, _updateAccountDto);
 
-            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, objectResult.StatusCode);
         }
 
         #endregion
@@ -156,27 +175,27 @@ namespace Testing.Services
         public void DeleteAccount_Success()
         {
             _accountService.Setup(x => x.DeleteAccount(It.IsAny<Guid>()));
-            HttpResponseMessage result = _accountController.DeleteAccount(_id);
+            IActionResult result = _accountController.DeleteAccount(_id);
 
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.AreEqual((int)HttpStatusCode.OK, ((IStatusCodeActionResult)result).StatusCode);
         }
 
         [TestMethod]
         public void DeleteAccount_ArgumentException()
         {
             _accountService.Setup(x => x.DeleteAccount(It.IsAny<Guid>())).Throws(_argumentException);
-            HttpResponseMessage result = _accountController.DeleteAccount(_id);
+            IActionResult result = _accountController.DeleteAccount(_id);
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, ((IStatusCodeActionResult)result).StatusCode);
         }
 
         [TestMethod]
         public void DeleteAccount_Exception()
         {
             _accountService.Setup(x => x.DeleteAccount(It.IsAny<Guid>())).Throws(new Exception());
-            HttpResponseMessage result = _accountController.DeleteAccount(_id);
+            IActionResult result = _accountController.DeleteAccount(_id);
 
-            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, ((IStatusCodeActionResult)result).StatusCode);
         }
 
         #endregion
