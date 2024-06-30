@@ -1,11 +1,12 @@
 ﻿using Domain.DTOs;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
 namespace Application.Controllers
 {
-    //[RequiresAuthorization]
+    [Authorize]
     [ApiController]
     [Route("api/account")]
     public class AccountController : ControllerBase
