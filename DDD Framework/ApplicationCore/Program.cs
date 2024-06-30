@@ -1,3 +1,4 @@
+using ApplicationCore.Middleware;
 using Domain.Interfaces;
 using Domain.Profiles;
 using Domain.Services;
@@ -14,7 +15,6 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, true)
     .AddJsonFile($"appsettings.{environment}.json", optional: true, true)
     .Build();
-
 
 builder.Services.AddSystemWebAdapters();
 
@@ -54,6 +54,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<LanguageMiddleware>();
 
 app.UseHttpsRedirection();
 
