@@ -1,9 +1,4 @@
-﻿using System.Globalization;
-using System.Threading;
-using System.Web;
-using System.Web.Http;
-
-namespace Application
+﻿namespace Application
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

@@ -6,8 +6,8 @@ using System.Data;
 namespace Application.Controllers
 {
     //[RequiresAuthorization]
-    [Route("api/Account")]
     [ApiController]
+    [Route("api/account")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;

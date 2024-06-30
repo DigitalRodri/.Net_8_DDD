@@ -1,13 +1,21 @@
+using Domain.Interfaces;
+using Domain.Profiles;
+using Domain.Services;
+using Infraestructure.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSystemWebAdapters();
-builder.Services.AddHttpForwarder();
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Dependency injection
+builder.Services.AddSingleton<IAccountService, AccountService>();
+builder.Services.AddSingleton<IAccountRepository, AccountRepository>();
+builder.Services.AddAutoMapper(typeof(AccountProfile));
 
 var app = builder.Build();
 
@@ -24,6 +32,5 @@ app.UseAuthorization();
 app.UseSystemWebAdapters();
 
 app.MapControllers();
-app.MapForwarder("/{**catch-all}", app.Configuration["ProxyTo"]).Add(static builder => ((RouteEndpointBuilder)builder).Order = int.MaxValue);
 
 app.Run();
