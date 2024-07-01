@@ -7,7 +7,7 @@ Migrated from this .Net Framework 4.8.1 project: https://github.com/DigitalRodri
 *Postman collection available in Postman folder.*
 
 Contains:
-* Basic CRUD operations using Entity Framework 6
+* Basic CRUD operations using Entity Framework Core V8
 * Dependency injection built-in .NET
 * Entity-Dto mapping using Automapper
 * Language handling using Resources file
