@@ -14,7 +14,7 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="System.ComponentModel.Annotations" />
   </ItemGroup>
 </Project>

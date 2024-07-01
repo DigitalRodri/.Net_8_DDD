@@ -4,7 +4,7 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("account.Account")]
+    [Table("Account", Schema="account")]
     public partial class Account
     {
         [Key]

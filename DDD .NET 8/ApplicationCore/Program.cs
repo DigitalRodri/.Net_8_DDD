@@ -3,7 +3,9 @@ using Domain.Interfaces;
 using Domain.Profiles;
 using Domain.Services;
 using Infraestructure.Repository;
+using Infraestructure.Repository.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -11,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Get current environment appsettings.json file
 string environment = builder.Environment.EnvironmentName;
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", optional: false, true)
-    .AddJsonFile($"appsettings.{environment}.json", optional: true, true)
+var Configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
     .Build();
 
 builder.Services.AddSystemWebAdapters();
@@ -24,13 +26,17 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<DDDContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DDDConnectionString")));
+builder.Services.AddScoped<DDDContext>();
+
 // Dependency injection
-builder.Services.AddSingleton<IAccountService, AccountService>();
-builder.Services.AddSingleton<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddAutoMapper(typeof(AccountProfile));
 
-var issuerSigningKey = configuration["Keys:IssuerSigningKey"];
-var validIssuer = configuration["Keys:ValidIssuer"];
+var issuerSigningKey = Configuration["Keys:IssuerSigningKey"];
+var validIssuer = Configuration["Keys:ValidIssuer"];
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg => {

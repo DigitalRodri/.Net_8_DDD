@@ -1,15 +1,15 @@
 using Domain.Entities;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Infraestructure.Repository.Models
 {
     public partial class DDDContext : DbContext
     {
-        public DDDContext()
-            : base("name=DDDConnectionString")
+        public DDDContext(DbContextOptions<DDDContext> options) : base(options)
         {
         }
 
-        public virtual DbSet<Account> Accounts { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }

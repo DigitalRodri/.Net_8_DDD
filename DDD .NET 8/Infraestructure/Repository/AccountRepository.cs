@@ -8,58 +8,50 @@ namespace Infraestructure.Repository
 {
     public class AccountRepository : IAccountRepository
     {
+        private readonly DDDContext _dddContext;
+
+        public AccountRepository(DDDContext dddContext)
+        {
+            _dddContext = dddContext;
+        }
+
         public Account GetAccount(Guid UUID)
         {
-            using (var db = new DDDContext())
-            {
-                return db.Accounts.Find(UUID);
-            }
+            return _dddContext.Accounts.Find(UUID);
         }
 
         public Account FindAccountByEmail(string email)
         {
-            using (var db = new DDDContext())
-            {
-                return db.Accounts.Where(x => x.Email == email).FirstOrDefault();
-            }
+            return _dddContext.Accounts.Where(x => x.Email == email).FirstOrDefault();
         }
 
         public Account CreateAccount(string email, string password, string name, string surname, string title, Guid salt)
         {
             Account newAccount = new Account(email, password, name, surname, title, salt);
 
-            using (var db = new DDDContext())
-            {
-                Account result = db.Accounts.Add(newAccount);
-                db.SaveChanges();
-                return result;
-            }
+            _dddContext.Accounts.Add(newAccount);
+            _dddContext.SaveChanges();
+            return newAccount;
         }
 
         public Account UpdateAccount(Guid UUID, string email, string name, string surname, string title)
         {
-            using (var db = new DDDContext())
-            {
-                Account modifiedAccount = db.Accounts.Find(UUID);
+            Account modifiedAccount = _dddContext.Accounts.Find(UUID);
 
-                modifiedAccount.Email = email;
-                modifiedAccount.Name = name;
-                modifiedAccount.Surname = surname;
-                modifiedAccount.Title = title;
+            modifiedAccount.Email = email;
+            modifiedAccount.Name = name;
+            modifiedAccount.Surname = surname;
+            modifiedAccount.Title = title;
 
-                db.SaveChanges();
-                return modifiedAccount;
-            }
+            _dddContext.SaveChanges();
+            return modifiedAccount;
         }
 
         public void DeleteAccount(Guid UUID)
         {
-            using (var db = new DDDContext())
-            {
-                Account deletedAccount = db.Accounts.Find(UUID);
-                db.Accounts.Remove(deletedAccount);
-                db.SaveChanges();
-            }
+            Account deletedAccount = _dddContext.Accounts.Find(UUID);
+            _dddContext.Accounts.Remove(deletedAccount);
+            _dddContext.SaveChanges();
         }
     }
 }
