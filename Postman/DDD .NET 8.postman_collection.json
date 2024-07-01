@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f586d628-3300-4a90-b482-f3374822529f",
+		"_postman_id": "a1883318-4453-42e1-8611-3995771a0964",
 		"name": "DDD .NET 8",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36602723"
@@ -12,6 +12,16 @@
 				"strictSSL": false
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -19,24 +29,19 @@
 						"value": "es-ES",
 						"type": "text",
 						"disabled": true
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
-						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "https://localhost:44342/api/account/b36536e4-125f-42ff-8183-20be461a873e",
-					"protocol": "https",
+					"raw": "http://localhost:65257/api/account/ef468307-8289-4dba-a81b-08dc9a09adba",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "44342",
+					"port": "65257",
 					"path": [
 						"api",
 						"account",
-						"b36536e4-125f-42ff-8183-20be461a873e"
+						"ef468307-8289-4dba-a81b-08dc9a09adba"
 					]
 				}
 			},
@@ -45,23 +50,34 @@
 		{
 			"name": "Account",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
 						"key": "Accept-Language",
-						"value": "en-US",
+						"value": "es-ES",
 						"type": "text",
 						"disabled": true
 					},
 					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
-						"type": "text"
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Email\": \"mail5@mail.com\",\r\n    \"Name\": \"Name\",\r\n    \"Surname\": \"Surname\",\r\n    \"Title\": \"Mr\",\r\n    \"Password\": \"YourPassword123\"\r\n}",
+					"raw": "{\r\n    \"Email\": \"mail9@mail.com\",\r\n    \"Name\": \"Name\",\r\n    \"Surname\": \"Surname\",\r\n    \"Title\": \"Mr\",\r\n    \"Password\": \"YourPassword123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -69,15 +85,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44342/api/Account",
-					"protocol": "https",
+					"raw": "http://localhost:65257/api/account",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "44342",
+					"port": "65257",
 					"path": [
 						"api",
-						"Account"
+						"account"
 					]
 				}
 			},
@@ -86,16 +102,21 @@
 		{
 			"name": "Account",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Accept-Language",
 						"value": "es-ES",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
 						"type": "text"
 					}
 				],
@@ -109,16 +130,16 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44342/api/account/55bf8904-3b8d-4b17-82b0-85e91e23c0f2",
-					"protocol": "https",
+					"raw": "http://localhost:65257/api/account/e3f3dbb6-aec8-4189-6cd5-08dc9a034769",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "44342",
+					"port": "65257",
 					"path": [
 						"api",
 						"account",
-						"55bf8904-3b8d-4b17-82b0-85e91e23c0f2"
+						"e3f3dbb6-aec8-4189-6cd5-08dc9a034769"
 					]
 				}
 			},
@@ -127,30 +148,29 @@
 		{
 			"name": "Account",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
-						"type": "text"
-					},
-					{
-						"key": "Accept-Language",
-						"value": "es-ES",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "https://localhost:44342/api/account/55bf8904-3b8d-4b17-82b0-85e91e23c0f2",
-					"protocol": "https",
+					"raw": "http://localhost:65257/api/account/ef468307-8289-4dba-a81b-08dc9a09adba",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "44342",
+					"port": "65257",
 					"path": [
 						"api",
 						"account",
-						"55bf8904-3b8d-4b17-82b0-85e91e23c0f2"
+						"ef468307-8289-4dba-a81b-08dc9a09adba"
 					]
 				}
 			},
