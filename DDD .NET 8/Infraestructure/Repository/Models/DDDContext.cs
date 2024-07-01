@@ -1,7 +1,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infraestructure.Repository.Models
+namespace Infrastructure.Repository.Models
 {
     public partial class DDDContext : DbContext
     {

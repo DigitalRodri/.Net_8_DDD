@@ -1,10 +1,10 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
-using Infraestructure.Repository.Models;
+using Infrastructure.Repository.Models;
 using System;
 using System.Linq;
 
-namespace Infraestructure.Repository
+namespace Infrastructure.Repository
 {
     public class AccountRepository : IAccountRepository
     {
