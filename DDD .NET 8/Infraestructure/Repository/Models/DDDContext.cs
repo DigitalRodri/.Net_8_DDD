@@ -1,6 +1,5 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace Infraestructure.Repository.Models
 {
@@ -11,5 +10,10 @@ namespace Infraestructure.Repository.Models
         }
 
         public DbSet<Account> Accounts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Account>().ToTable(tb => tb.HasTrigger("UpdateDateTimeAccount"));
+        }
     }
 }
