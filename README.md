@@ -9,7 +9,7 @@ Migrated from this .Net Framework 4.8.1 project: https://github.com/DigitalRodri
 Contains:
 * Basic CRUD operations using Entity Framework 6
 * Dependency injection built-in .NET
-* Object mapping using Automapper
+* Entity-Dto mapping using Automapper
 * Language handling using Resources file
 * Password hashing
 * GUID and creation/modification dates generated directly in SQL
