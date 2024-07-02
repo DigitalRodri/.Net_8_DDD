@@ -9,7 +9,6 @@ namespace Testing.Helpers
     public static class ObjectHelper
     {
         public static Guid _id = Guid.NewGuid();
-        public static Guid _salt = Guid.NewGuid();
         public static string _mail = "escribanoc.r@outlook.com";
         public static string _password = "ThisIsAPassword";
         public static string _name = "Rodrigo";
@@ -18,7 +17,7 @@ namespace Testing.Helpers
 
         public static Account GetAccount()
         {
-            return new Account(_id, _mail, _password, _name, _surname, _title, _salt, DateTime.Now, DateTime.Now.AddMinutes(20));
+            return new Account(_id, _mail, _password, _name, _surname, _title, DateTime.Now, DateTime.Now.AddMinutes(20));
         }
 
         public static AccountDto GetAccountDto()

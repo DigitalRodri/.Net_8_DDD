@@ -25,9 +25,9 @@ namespace Infrastructure.Repository
             return _dddContext.Accounts.Where(x => x.Email == email).FirstOrDefault();
         }
 
-        public Account CreateAccount(string email, string password, string name, string surname, string title, Guid salt)
+        public Account CreateAccount(string email, string password, string name, string surname, string title)
         {
-            Account newAccount = new Account(email, password, name, surname, title, salt);
+            Account newAccount = new Account(email, password, name, surname, title);
 
             _dddContext.Accounts.Add(newAccount);
             _dddContext.SaveChanges();

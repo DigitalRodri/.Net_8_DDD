@@ -20,7 +20,6 @@ namespace Testing.Services
         private static IMapper _autoMapper;
 
         private Guid _id;
-        private Guid _salt;
         private AccountDto _accountDto;
         private Account _account;
         private Account _nullAccount;
@@ -45,7 +44,6 @@ namespace Testing.Services
             _accountService = new AccountService(_accountRepository.Object, _autoMapper);
 
             _id = Guid.NewGuid();
-            _salt = Guid.NewGuid();
             _accountDto = ObjectHelper.GetAccountDto();
             _account = ObjectHelper.GetAccount();
             _nullAccount = null;
@@ -73,7 +71,7 @@ namespace Testing.Services
         public void CreateAccount_Success()
         {
             _accountRepository.Setup(x => x.FindAccountByEmail(It.IsAny<string>())).Returns(_nullAccount);
-            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(_account);
             AccountDto result = _accountService.CreateAccount(_simpleAccountDto);
 

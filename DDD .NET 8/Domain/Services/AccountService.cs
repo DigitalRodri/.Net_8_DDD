@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
+using Domain.Helpers;
 using Domain.Interfaces;
 using System;
 using System.Data;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Domain.Services
 {
@@ -37,11 +35,10 @@ namespace Domain.Services
             Account existingAccount = _accountRepository.FindAccountByEmail(simpleAccountDto.Email);
             if (existingAccount != null) throw new DuplicateNameException(String.Format(Resources.Resources.AccountAlreadyExists, simpleAccountDto.Email));
 
-            Guid salt = Guid.NewGuid();
-            string hashedPassword = GetStringHash(simpleAccountDto.Password, salt);
+            string hashedPassword = HashHelper.Hash(simpleAccountDto.Password);
 
             Account account = _accountRepository
-                .CreateAccount(simpleAccountDto.Email, hashedPassword, simpleAccountDto.Name, simpleAccountDto.Surname, simpleAccountDto.Title, salt);
+                .CreateAccount(simpleAccountDto.Email, hashedPassword, simpleAccountDto.Name, simpleAccountDto.Surname, simpleAccountDto.Title);
 
             return _autoMapper.Map<AccountDto>(account);
         }
@@ -98,16 +95,6 @@ namespace Domain.Services
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(updateAccountDto.Surname)));
             if (!string.IsNullOrEmpty(updateAccountDto.Title) && updateAccountDto.Title.Length > 5)
                 throw new ArgumentException(String.Format(Resources.Resources.TitleLengthError, updateAccountDto.Title));
-        }
-
-        private static string GetStringHash(string password, Guid salt)
-        {
-            byte[] encodedPassword = Encoding.UTF8.GetBytes(password);
-            byte[] encodedSalt = Encoding.UTF8.GetBytes(salt.ToString());
-            byte[] saltedValue = encodedPassword.Concat(encodedSalt).ToArray();
-            
-            byte[] hash = SHA256.HashData(saltedValue);
-            return Convert.ToHexString(hash);
         }
 
         #endregion

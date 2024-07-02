@@ -7,6 +7,5 @@ CREATE TABLE [account].[Account](
 	Name varchar(25) NOT NULL,
 	Surname varchar(25) NOT NULL,
 	Title varchar(5) NULL,
-	Salt UNIQUEIDENTIFIER NOT NULL,
 	UTCCreatedDateTime DATETIME2 DEFAULT getdate() NOT NULL,
     UTCUpdatedDateTime DATETIME2 DEFAULT getdate() NOT NULL)
