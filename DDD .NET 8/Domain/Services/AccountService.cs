@@ -105,14 +105,9 @@ namespace Domain.Services
             byte[] encodedPassword = Encoding.UTF8.GetBytes(password);
             byte[] encodedSalt = Encoding.UTF8.GetBytes(salt.ToString());
             byte[] saltedValue = encodedPassword.Concat(encodedSalt).ToArray();
-
-            byte[] hash = Hash(saltedValue);
-            return BitConverter.ToString(hash).Replace("-", "");
-        }
-
-        private static byte[] Hash(byte[] saltedValue)
-        {
-            return new SHA256Managed().ComputeHash(saltedValue);
+            
+            byte[] hash = SHA256.HashData(saltedValue);
+            return Convert.ToHexString(hash);
         }
 
         #endregion
