@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Net;
 using Testing.Helpers;
 
@@ -24,6 +26,7 @@ namespace Testing.Services
 
         private Guid _id;
         private AccountDto _accountDto;
+        private IEnumerable<AccountDto> _accountDtoList;
         private SimpleAccountDto _simpleAccountDto;
         private UpdateAccountDto _updateAccountDto;
         private ArgumentException _argumentException;
@@ -46,11 +49,38 @@ namespace Testing.Services
 
             _id = Guid.NewGuid();
             _accountDto = ObjectHelper.GetAccountDto();
+            _accountDtoList = ObjectHelper.GetAccountDtoList();
             _simpleAccountDto = ObjectHelper.GetSimpleAccountDto();
             _updateAccountDto = ObjectHelper.GetUpdateAccountDto();
             _argumentException = ObjectHelper.GetArgumentException();
             _duplicateNameException = ObjectHelper.GetDuplicateNameException();
         }
+
+        #region GetAllAccounts
+
+        [TestMethod]
+        public void GetAllAccounts_Success()
+        {
+            _accountService.Setup(x => x.GetAllAccounts()).Returns(_accountDtoList);
+            ActionResult<AccountDto> result = _accountController.GetAllAccounts();
+
+            OkObjectResult objectResult = result.Result as OkObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+            IEnumerable<AccountDto> accountDtoResult = objectResult.Value as IEnumerable<AccountDto>;
+            Assert.IsTrue(accountDtoResult.Count() > 0);
+        }
+
+        [TestMethod]
+        public void GetAllAccounts_Exception()
+        {
+            _accountService.Setup(x => x.GetAllAccounts()).Throws(new Exception());
+            ActionResult<AccountDto> result = _accountController.GetAllAccounts();
+
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, objectResult.StatusCode);
+        }
+
+        #endregion
 
         #region GetAccount
 

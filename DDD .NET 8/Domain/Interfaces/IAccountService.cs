@@ -1,5 +1,6 @@
 ﻿using Domain.DTOs;
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Interfaces
 {
@@ -9,5 +10,6 @@ namespace Domain.Interfaces
         AccountDto CreateAccount(SimpleAccountDto simpleAccountDto);
         AccountDto UpdateAccount(Guid UUID, UpdateAccountDto updateAccountDto);
         void DeleteAccount(Guid UUID);
+        IEnumerable<AccountDto> GetAllAccounts();
     }
 }

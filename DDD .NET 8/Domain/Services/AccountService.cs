@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Helpers;
 using Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Domain.Services
@@ -17,6 +18,13 @@ namespace Domain.Services
         {
             _accountRepository = accountRepository;
             _autoMapper = mapper;
+        }
+
+        public IEnumerable<AccountDto> GetAllAccounts()
+        {
+            IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
+
+            return _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
         }
 
         public AccountDto GetAccount(Guid UUID)

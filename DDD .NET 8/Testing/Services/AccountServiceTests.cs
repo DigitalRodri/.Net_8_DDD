@@ -7,7 +7,9 @@ using Domain.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Testing.Helpers;
 
 namespace Testing.Services
@@ -22,6 +24,7 @@ namespace Testing.Services
         private Guid _id;
         private AccountDto _accountDto;
         private Account _account;
+        private IEnumerable<Account> _accountList;
         private Account _nullAccount;
         private SimpleAccountDto _simpleAccountDto;
         private UpdateAccountDto _updateAccountDto;
@@ -46,10 +49,25 @@ namespace Testing.Services
             _id = Guid.NewGuid();
             _accountDto = ObjectHelper.GetAccountDto();
             _account = ObjectHelper.GetAccount();
+            _accountList = ObjectHelper.GetAccountList();
             _nullAccount = null;
             _simpleAccountDto = ObjectHelper.GetSimpleAccountDto();
             _updateAccountDto = ObjectHelper.GetUpdateAccountDto();
         }
+
+        #region GetAllAccounts
+
+        [TestMethod]
+        public void GetAllAccounts_Success()
+        {
+            _accountRepository.Setup(x => x.GetAllAccounts()).Returns(_accountList);
+            IEnumerable<AccountDto> result = _accountService.GetAllAccounts();
+
+            Assert.AreEqual(_accountList.FirstOrDefault().Name, result.FirstOrDefault().Name);
+            Assert.AreEqual(_accountList.FirstOrDefault().Surname, result.FirstOrDefault().Surname);
+        }
+
+        #endregion
 
         #region GetAccount
 

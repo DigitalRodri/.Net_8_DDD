@@ -19,6 +19,22 @@ namespace Application.Controllers
             _accountService = accountService;
         }
 
+        [HttpGet()]
+        public ActionResult<AccountDto> GetAllAccounts()
+        {
+            try
+            {
+                IEnumerable<AccountDto> accountDTOList = _accountService.GetAllAccounts();
+
+                if (accountDTOList.Count() == 0) return NoContent();
+                return Ok(accountDTOList);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
         [HttpGet("{UUID}")]
         public ActionResult<AccountDto> GetAccount(Guid UUID)
         {

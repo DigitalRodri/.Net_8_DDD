@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Infrastructure.Repository.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Infrastructure.Repository
@@ -13,6 +14,11 @@ namespace Infrastructure.Repository
         public AccountRepository(DDDContext dddContext)
         {
             _dddContext = dddContext;
+        }
+
+        public IEnumerable<Account> GetAllAccounts()
+        {
+            return _dddContext.Accounts;
         }
 
         public Account GetAccount(Guid UUID)

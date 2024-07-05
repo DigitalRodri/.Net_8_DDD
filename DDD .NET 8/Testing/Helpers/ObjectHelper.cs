@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Resources;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Testing.Helpers
@@ -20,9 +21,19 @@ namespace Testing.Helpers
             return new Account(_id, _mail, _password, _name, _surname, _title, DateTime.Now, DateTime.Now.AddMinutes(20));
         }
 
+        public static IEnumerable<Account> GetAccountList()
+        {
+            return new List<Account>() { GetAccount(), GetAccount() };
+        }
+
         public static AccountDto GetAccountDto()
         {
             return new AccountDto(_id, _mail, _name, _surname, _title);
+        }
+
+        public static IEnumerable<AccountDto> GetAccountDtoList()
+        {
+            return new List<AccountDto>() { GetAccountDto(), GetAccountDto() };
         }
 
         public static SimpleAccountDto GetSimpleAccountDto()
