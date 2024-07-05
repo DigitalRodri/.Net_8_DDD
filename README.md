@@ -1,7 +1,7 @@
-# .Net_8_DDD
-DDD Project based on .Net 8
+# .NET_8_DDD
+## DDD Project based on .NET 8
 
-Migrated from this .Net Framework 4.8.1 project: https://github.com/DigitalRodri/.Net_Framework_DDD
+Migrated from this .NET Framework 4.8.1 project: https://github.com/DigitalRodri/.Net_Framework_DDD
 
 *Run using IIS Express and ApplicationCore as Startup Project.*
 *Postman collection available in Postman folder.*
