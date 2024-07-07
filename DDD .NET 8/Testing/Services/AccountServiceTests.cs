@@ -19,6 +19,7 @@ namespace Testing.Services
     {
         private IAccountService _accountService;
         private Mock<IAccountRepository> _accountRepository;
+        private Mock<IAuthorizationHelper> _authorizationHelper;
         private static IMapper _autoMapper;
 
         private Guid _id;
@@ -28,6 +29,8 @@ namespace Testing.Services
         private Account _nullAccount;
         private SimpleAccountDto _simpleAccountDto;
         private UpdateAccountDto _updateAccountDto;
+        private AuthenticationDto _authenticationDto;
+        private string _jwtToken;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -44,7 +47,8 @@ namespace Testing.Services
         public void Init()
         {
             _accountRepository = new Mock<IAccountRepository>();
-            _accountService = new AccountService(_accountRepository.Object, _autoMapper);
+            _authorizationHelper = new Mock<IAuthorizationHelper>();
+            _accountService = new AccountService(_accountRepository.Object, _authorizationHelper.Object, _autoMapper);
 
             _id = Guid.NewGuid();
             _accountDto = ObjectHelper.GetAccountDto();
@@ -53,6 +57,8 @@ namespace Testing.Services
             _nullAccount = null;
             _simpleAccountDto = ObjectHelper.GetSimpleAccountDto();
             _updateAccountDto = ObjectHelper.GetUpdateAccountDto();
+            _authenticationDto = ObjectHelper.GetAuthenticationDto();
+            _jwtToken = ObjectHelper._jwtToken;
         }
 
         #region GetAllAccounts
@@ -135,6 +141,31 @@ namespace Testing.Services
 
         #endregion
 
+        #region Authenticate
+
+        [TestMethod]
+        public void Authenticate_Success()
+        {
+            _accountRepository.Setup(x => x.FindAccountByEmail(It.IsAny<string>())).Returns(_account);
+            _authorizationHelper.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            _authorizationHelper.Setup(x => x.GenerateJwtToken()).Returns(_jwtToken);
+            string result = _accountService.Authenticate(_authenticationDto);
+
+            Assert.AreEqual(_jwtToken, result);
+        }
+
+        [TestMethod]
+        public void Authenticate_IncorrectPassword()
+        {
+            _accountRepository.Setup(x => x.FindAccountByEmail(It.IsAny<string>())).Returns(_account);
+            _authorizationHelper.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
+            string result = _accountService.Authenticate(_authenticationDto);
+
+            Assert.AreEqual(string.Empty, result);
+        }
+
+        #endregion
+
         #region ValidateUUID
 
         [TestMethod]
@@ -146,8 +177,7 @@ namespace Testing.Services
 
         #endregion
 
-        #region ValidateSimpleAccountDTO
-
+        #region ValidateSimpleAccountDto
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ValidateSimpleAccountDto_Throws_ArgumentExceptionCausedByNullEmail()
@@ -190,7 +220,7 @@ namespace Testing.Services
 
         #endregion
 
-        #region ValidateUpdateAccountDTO
+        #region ValidateUpdateAccountDto
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -222,6 +252,39 @@ namespace Testing.Services
         {
             _updateAccountDto.Title = "MoreThan5Characters";
             AccountDto result = _accountService.UpdateAccount(_id, _updateAccountDto);
+        }
+
+        #endregion
+
+        #region ValidateAuthenticationDto
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ValidateAuthenticationDto_Throws_ArgumentExceptionCausedByNullEmail()
+        {
+            _authenticationDto.Email = "";
+            string result = _accountService.Authenticate(_authenticationDto);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ValidateAuthenticationDto_Throws_ArgumentExceptionCausedByNullPassword()
+        {
+            _authenticationDto.Password = "";
+            string result = _accountService.Authenticate(_authenticationDto);
+        }
+
+        #endregion
+
+        #region ValidateExistingAccount
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ValidateExistingAccount_AccountDoesNotExist()
+        {
+            _account = null;
+            _accountRepository.Setup(x => x.FindAccountByEmail(It.IsAny<string>())).Returns(_account);
+            string result = _accountService.Authenticate(_authenticationDto);
         }
 
         #endregion

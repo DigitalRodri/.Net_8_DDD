@@ -132,4 +132,10 @@
   <data name="NoAuthorization" xml:space="preserve">
     <value>The request must contain an Authorization JWT Bearer Token</value>
   </data>
+  <data name="AccountDoesNotExist" xml:space="preserve">
+    <value>There is no registered account with email: '{0}'</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>The input password was incorrect</value>
+  </data>
 </root>

@@ -32,7 +32,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" />
     <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="System.ComponentModel.Annotations" />
     <PackageReference Include="System.CodeDom" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
   </ItemGroup>
 </Project>

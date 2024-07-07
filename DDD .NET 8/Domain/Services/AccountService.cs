@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
-using Domain.Helpers;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,11 +11,13 @@ namespace Domain.Services
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IAuthorizationHelper _authorizationHelper;
         private readonly IMapper _autoMapper;
 
-        public AccountService(IAccountRepository accountRepository, IMapper mapper)
+        public AccountService(IAccountRepository accountRepository, IAuthorizationHelper authorizationHelper, IMapper mapper)
         {
             _accountRepository = accountRepository;
+            _authorizationHelper = authorizationHelper;
             _autoMapper = mapper;
         }
 
@@ -43,7 +44,7 @@ namespace Domain.Services
             Account existingAccount = _accountRepository.FindAccountByEmail(simpleAccountDto.Email);
             if (existingAccount != null) throw new DuplicateNameException(String.Format(Resources.Resources.AccountAlreadyExists, simpleAccountDto.Email));
 
-            string hashedPassword = HashHelper.Hash(simpleAccountDto.Password);
+            string hashedPassword = _authorizationHelper.Hash(simpleAccountDto.Password);
 
             Account account = _accountRepository
                 .CreateAccount(simpleAccountDto.Email, hashedPassword, simpleAccountDto.Name, simpleAccountDto.Surname, simpleAccountDto.Title);
@@ -69,6 +70,16 @@ namespace Domain.Services
             _accountRepository.DeleteAccount(UUID);
 
             return;
+        }
+
+        public string Authenticate(AuthenticationDto authenticationDto)
+        {
+            ValidateAuthenticationDto(authenticationDto);
+            Account existingAccount = ValidateExistingAccount(authenticationDto);
+
+            if (_authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Password))
+                return _authorizationHelper.GenerateJwtToken();
+            else return string.Empty;
         }
 
         #region Private methods
@@ -103,6 +114,22 @@ namespace Domain.Services
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(updateAccountDto.Surname)));
             if (!string.IsNullOrEmpty(updateAccountDto.Title) && updateAccountDto.Title.Length > 5)
                 throw new ArgumentException(String.Format(Resources.Resources.TitleLengthError, updateAccountDto.Title));
+        }
+
+        private static void ValidateAuthenticationDto(AuthenticationDto authenticationDto)
+        {
+            if (string.IsNullOrEmpty(authenticationDto.Email))
+                throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(authenticationDto.Email)));
+            if (string.IsNullOrEmpty(authenticationDto.Password))
+                throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(authenticationDto.Password)));
+        }
+
+        private Account ValidateExistingAccount(AuthenticationDto authenticationDto)
+        {
+            Account existingAccount = _accountRepository.FindAccountByEmail(authenticationDto.Email);
+            if (existingAccount == null)
+                throw new ArgumentException(String.Format(Resources.Resources.AccountDoesNotExist, authenticationDto.Email));
+            return existingAccount;
         }
 
         #endregion

@@ -15,6 +15,7 @@ namespace Testing.Helpers
         public static string _name = "Rodrigo";
         public static string _surname = "Escribano";
         public static string _title = "mr";
+        public static string _jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE3MjAzNjUwNjAsImV4cCI6MTcyMDM2Njg2MCwiaWF0IjoxNzIwMzY1MDYwLCJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyJ9.Z4FSZWMPNjHe42lBpZdOGldVE40tF_Tn-sY1OPD_7rg";
 
         public static Account GetAccount()
         {
@@ -44,6 +45,11 @@ namespace Testing.Helpers
         public static UpdateAccountDto GetUpdateAccountDto()
         {
             return new UpdateAccountDto(_mail, _name, _surname, _title);
+        }
+
+        public static AuthenticationDto GetAuthenticationDto()
+        {
+            return new AuthenticationDto(_mail, _surname);
         }
 
         public static ArgumentException GetArgumentException()

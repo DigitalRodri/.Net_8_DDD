@@ -1,5 +1,6 @@
 ﻿using Domain.DTOs;
 using Domain.Interfaces;
+using Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -102,6 +103,28 @@ namespace Application.Controllers
             {
                 _accountService.DeleteAccount(UUID);
                 return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost()]
+        [Route("authentication")]
+        public ActionResult<string> Authenticate(AuthenticationDto authenticationDto)
+        {
+            try
+            {
+                string result = _accountService.Authenticate(authenticationDto);
+
+                if (String.IsNullOrEmpty(result))
+                    return Unauthorized(Resources.IncorrectPassword);
+                return Ok(result);
             }
             catch (ArgumentException ex)
             {

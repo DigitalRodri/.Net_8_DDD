@@ -1,4 +1,5 @@
 using ApplicationCore.Middleware;
+using Domain.Helpers;
 using Domain.Interfaces;
 using Domain.Profiles;
 using Domain.Services;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<DDDContext>();
 // Dependency injection
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
 builder.Services.AddAutoMapper(typeof(AccountProfile));
 
 var issuerSigningKey = Configuration["Keys:IssuerSigningKey"];

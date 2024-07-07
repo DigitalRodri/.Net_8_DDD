@@ -1,6 +1,7 @@
 using Application.Controllers;
 using Domain.DTOs;
 using Domain.Interfaces;
+using Domain.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -29,8 +30,10 @@ namespace Testing.Services
         private IEnumerable<AccountDto> _accountDtoList;
         private SimpleAccountDto _simpleAccountDto;
         private UpdateAccountDto _updateAccountDto;
+        private AuthenticationDto _authenticationDto;
         private ArgumentException _argumentException;
         private DuplicateNameException _duplicateNameException;
+        private string _jwtToken;
 
         [TestInitialize]
         public void Init() 
@@ -52,8 +55,10 @@ namespace Testing.Services
             _accountDtoList = ObjectHelper.GetAccountDtoList();
             _simpleAccountDto = ObjectHelper.GetSimpleAccountDto();
             _updateAccountDto = ObjectHelper.GetUpdateAccountDto();
+            _authenticationDto = ObjectHelper.GetAuthenticationDto();
             _argumentException = ObjectHelper.GetArgumentException();
             _duplicateNameException = ObjectHelper.GetDuplicateNameException();
+            _jwtToken = ObjectHelper._jwtToken;
         }
 
         #region GetAllAccounts
@@ -226,6 +231,54 @@ namespace Testing.Services
             IActionResult result = _accountController.DeleteAccount(_id);
 
             Assert.AreEqual((int)HttpStatusCode.InternalServerError, ((IStatusCodeActionResult)result).StatusCode);
+        }
+
+        #endregion
+
+        #region Authenticate
+
+        [TestMethod]
+        public void Authenticate_Success()
+        {
+            _accountService.Setup(x => x.Authenticate(It.IsAny<AuthenticationDto>())).Returns(_jwtToken);
+            ActionResult<string> result = _accountController.Authenticate(_authenticationDto);
+
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
+            string stringResult = objectResult.Value as string;
+            Assert.AreEqual(_jwtToken, stringResult);
+        }
+
+        [TestMethod]
+        public void Authenticate_Unauthorized()
+        {
+            _accountService.Setup(x => x.Authenticate(It.IsAny<AuthenticationDto>())).Returns(String.Empty);
+            ActionResult<string> result = _accountController.Authenticate(_authenticationDto);
+
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.Unauthorized, objectResult.StatusCode);
+            string stringResult = objectResult.Value as string;
+            Assert.AreEqual(Resources.IncorrectPassword, stringResult);
+        }
+
+        [TestMethod]
+        public void Authenticate_ArgumentException()
+        {
+            _accountService.Setup(x => x.Authenticate(It.IsAny<AuthenticationDto>())).Throws(_argumentException);
+            ActionResult<string> result = _accountController.Authenticate(_authenticationDto);
+
+            BadRequestObjectResult objectResult = result.Result as BadRequestObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void Authenticate_Exception()
+        {
+            _accountService.Setup(x => x.Authenticate(It.IsAny<AuthenticationDto>())).Throws(new Exception());
+            ActionResult<string> result = _accountController.Authenticate(_authenticationDto);
+
+            ObjectResult objectResult = result.Result as ObjectResult;
+            Assert.AreEqual((int)HttpStatusCode.InternalServerError, objectResult.StatusCode);
         }
 
         #endregion

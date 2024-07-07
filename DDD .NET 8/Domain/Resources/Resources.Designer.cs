@@ -70,6 +70,24 @@ namespace Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no registered account with email: &apos;{0}&apos;.
+        /// </summary>
+        public static string AccountDoesNotExist {
+            get {
+                return ResourceManager.GetString("AccountDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The input password was incorrect.
+        /// </summary>
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The request must contain an Authorization JWT Bearer Token.
         /// </summary>
         public static string NoAuthorization {
