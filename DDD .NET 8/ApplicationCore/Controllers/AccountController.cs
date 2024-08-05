@@ -8,7 +8,6 @@ using System.Data;
 
 namespace Application.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/account")]
     public class AccountController : ControllerBase
@@ -20,6 +19,7 @@ namespace Application.Controllers
             _accountService = accountService;
         }
 
+        [Authorize]
         [HttpGet()]
         public ActionResult<AccountDto> GetAllAccounts()
         {
@@ -36,6 +36,7 @@ namespace Application.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{UUID}")]
         public ActionResult<AccountDto> GetAccount(Guid UUID)
         {
@@ -56,6 +57,7 @@ namespace Application.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult<AccountDto> CreateAccount(SimpleAccountDto simpleAccountDto)
         {
@@ -78,6 +80,7 @@ namespace Application.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{UUID}")]
         public ActionResult<AccountDto> UpdateAccount(Guid UUID, UpdateAccountDto updateAccountDto)
         {
@@ -96,6 +99,7 @@ namespace Application.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{UUID}")]
         public IActionResult DeleteAccount(Guid UUID)
         {
