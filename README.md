@@ -15,6 +15,7 @@ Contains:
 * GUID and creation/modification dates generated directly in SQL
 * JWT Authentication with Authorization tag
 * Unit testing
+* Integration testing
 * Centralized package versioning
 
 Designed with Microsoft guidelines: 
