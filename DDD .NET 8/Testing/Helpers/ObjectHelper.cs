@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Testing.Helpers
+namespace UnitTesting.Helpers
 {
     public static class ObjectHelper
     {

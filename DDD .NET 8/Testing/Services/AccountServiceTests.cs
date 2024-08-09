@@ -10,9 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Testing.Helpers;
+using UnitTesting.Helpers;
 
-namespace Testing.Services
+namespace UnitTesting.Services
 {
     [TestClass]
     public class AccountServiceTests

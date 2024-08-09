@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
-using Testing.Helpers;
+using UnitTesting.Helpers;
 
-namespace Testing.Services
+namespace UnitTesting.Controllers
 {
     [TestClass]
     public class AccountControllerTests

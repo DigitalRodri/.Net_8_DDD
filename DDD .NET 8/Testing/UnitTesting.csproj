@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AssemblyTitle>Testing</AssemblyTitle>
-		<Product>Testing</Product>
+		<AssemblyTitle>UnitTesting</AssemblyTitle>
+		<Product>UnitTesting</Product>
 		<Copyright>Copyright ©  2024</Copyright>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
