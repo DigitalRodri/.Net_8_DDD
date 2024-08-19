@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Domain.DTOs
+﻿namespace Domain.DTOs
 {
     public class AccountDto
     {
