@@ -7,13 +7,13 @@ Migrated from this .NET Framework 4.8.1 project: https://github.com/DigitalRodri
 *Postman collection available in Postman folder.*
 
 Contains:
-* Basic CRUD operations using Entity Framework Core V8
-* Dependency injection built-in .NET
+* Basic CRUD operations using Entity Framework Core V8 with SQLServer
+* Dependency injection
 * Entity-Dto mapping using Automapper
 * Language handling using Resources file
-* Password hashing
-* GUID and creation/modification dates generated directly in SQL
 * JWT Authentication with Authorization tag
+* Password hashing with Pbkdf2
+* Account GUID and creation/modification dates generated directly in SQL
 * Unit testing
 * Integration testing
 * Centralized package versioning
