@@ -1,11 +1,9 @@
 ﻿using Domain.DTOs;
 using Domain.Entities;
 using Domain.Resources;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
-namespace UnitTesting.Helpers
+namespace Testing.Helpers
 {
     public static class ObjectHelper
     {

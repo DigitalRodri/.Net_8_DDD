@@ -7,14 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Net;
-using UnitTesting.Helpers;
+using Testing.Helpers;
 
-namespace UnitTesting.Controllers
+namespace Testing.UnitTests.Controllers
 {
     [TestClass]
     public class AccountControllerTests
@@ -36,7 +33,7 @@ namespace UnitTesting.Controllers
         private string _jwtToken;
 
         [TestInitialize]
-        public void Init() 
+        public void Init()
         {
             _accountService = new Mock<IAccountService>();
             _httpRequest = new Mock<HttpRequest>();
@@ -46,7 +43,7 @@ namespace UnitTesting.Controllers
             _httpRequest.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
 
             _httpContext = Mock.Of<HttpContext>(x => x.Request == _httpRequest.Object);
-            _controllerContext = new ControllerContext(){ HttpContext = _httpContext };
+            _controllerContext = new ControllerContext() { HttpContext = _httpContext };
 
             _accountController = new AccountController(_accountService.Object) { ControllerContext = _controllerContext };
 
@@ -252,7 +249,7 @@ namespace UnitTesting.Controllers
         [TestMethod]
         public void Authenticate_Unauthorized()
         {
-            _accountService.Setup(x => x.Authenticate(It.IsAny<AuthenticationDto>())).Returns(String.Empty);
+            _accountService.Setup(x => x.Authenticate(It.IsAny<AuthenticationDto>())).Returns(string.Empty);
             ActionResult<string> result = _accountController.Authenticate(_authenticationDto);
 
             ObjectResult objectResult = result.Result as ObjectResult;

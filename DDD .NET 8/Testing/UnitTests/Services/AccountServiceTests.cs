@@ -6,13 +6,10 @@ using Domain.Profiles;
 using Domain.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using UnitTesting.Helpers;
+using Testing.Helpers;
 
-namespace UnitTesting.Services
+namespace Testing.UnitTests.Services
 {
     [TestClass]
     public class AccountServiceTests
