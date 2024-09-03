@@ -7,17 +7,20 @@ namespace Testing.Helpers
 {
     public static class ObjectHelper
     {
-        public static Guid _id = Guid.NewGuid();
-        public static string _mail = "escribanoc.r@outlook.com";
-        public static string _password = "ThisIsAPassword";
-        public static string _name = "Rodrigo";
-        public static string _surname = "Escribano";
-        public static string _title = "mr";
-        public static string _jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE3MjAzNjUwNjAsImV4cCI6MTcyMDM2Njg2MCwiaWF0IjoxNzIwMzY1MDYwLCJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyJ9.Z4FSZWMPNjHe42lBpZdOGldVE40tF_Tn-sY1OPD_7rg";
+        public static readonly Guid _id = Guid.NewGuid();
+        public const string Mail = "escribanoc.r@outlook.com";
+        public const string Password = "ThisIsAPassword";
+        public const string Name = "Rodrigo";
+        public const string Surname = "Escribano";
+        public const string Title = "mr";
+        public const string UpdatedName = "Ada";
+        public const string UpdatedSurname = "Lovelace";
+        public const string UpdatedTitle = "mrs";
+        public const string JwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE3MjAzNjUwNjAsImV4cCI6MTcyMDM2Njg2MCwiaWF0IjoxNzIwMzY1MDYwLCJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyJ9.Z4FSZWMPNjHe42lBpZdOGldVE40tF_Tn-sY1OPD_7rg";
 
         public static Account GetAccount()
         {
-            return new Account(_id, _mail, _password, _name, _surname, _title, DateTime.Now, DateTime.Now.AddMinutes(20));
+            return new Account(_id, Mail, Password, Name, Surname, Title, DateTime.Now, DateTime.Now.AddMinutes(20));
         }
 
         public static IEnumerable<Account> GetAccountList()
@@ -27,7 +30,7 @@ namespace Testing.Helpers
 
         public static AccountDto GetAccountDto()
         {
-            return new AccountDto(_id, _mail, _name, _surname, _title);
+            return new AccountDto(_id, Mail, Name, Surname, Title);
         }
 
         public static IEnumerable<AccountDto> GetAccountDtoList()
@@ -37,17 +40,17 @@ namespace Testing.Helpers
 
         public static SimpleAccountDto GetSimpleAccountDto()
         {
-            return new SimpleAccountDto(_mail, _password, _name, _surname, _title);
+            return new SimpleAccountDto(Mail, Password, Name, Surname, Title);
         }
 
         public static UpdateAccountDto GetUpdateAccountDto()
         {
-            return new UpdateAccountDto(_mail, _name, _surname, _title);
+            return new UpdateAccountDto(Mail, UpdatedName, UpdatedSurname, UpdatedTitle);
         }
 
         public static AuthenticationDto GetAuthenticationDto()
         {
-            return new AuthenticationDto(_mail, _surname);
+            return new AuthenticationDto(Mail, Surname);
         }
 
         public static ArgumentException GetArgumentException()
@@ -57,7 +60,7 @@ namespace Testing.Helpers
 
         public static DuplicateNameException GetDuplicateNameException()
         {
-            return new DuplicateNameException(String.Format(Resources.AccountAlreadyExists, _mail));
+            return new DuplicateNameException(String.Format(Resources.AccountAlreadyExists, Mail));
         }
     }
 }

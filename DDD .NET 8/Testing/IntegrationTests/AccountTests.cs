@@ -5,38 +5,32 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Json;
+using Testing.Helpers;
 
 namespace Testing.IntegrationTests;
 
 [TestClass]
 public class AccountTests : WebApplicationFactory<Program>
 {
-    private static TestContext _testContext = null!;
-    private static WebApplicationFactory<Program> _factory;
-    private static readonly string _email = "accountController@integrationtest.com";
-    private static readonly string _temporaryEmail = "temporaryMail@integrationtest.com";
-    private static readonly string _Name = "Name";
-    private static readonly string _updatedName = "updatedName";
-    private static readonly string _Surname = "Surname";
-    private static readonly string _updatedSurname = "updatedSurname";
-    private static readonly string _password = "password";
-    private static readonly string _title = "Mr";
-    private static readonly string _updatedTitle = "Mrs";
+    private const string AdminEmail = "accountController@integrationtest.com";
+    private const string AdminPassword = "password";
 
-    private static HttpClient _regularHttpClient;
-    private static HttpClient _authenticatedHttpClient;
+    private static TestContext s_testContext;
+    private static WebApplicationFactory<Program> s_factory;
+    private static HttpClient s_regularHttpClient;
+    private static HttpClient s_authenticatedHttpClient;
 
     [ClassInitialize]
     public static void ClassInit(TestContext testContext)
     {
-        _testContext = testContext;
-        _factory = new WebApplicationFactory<Program>();
+        s_testContext = testContext;
+        s_factory = new WebApplicationFactory<Program>();
 
-        _regularHttpClient = _factory.CreateClient();
-        _authenticatedHttpClient = _factory.CreateClient();
+        s_regularHttpClient = s_factory.CreateClient();
+        s_authenticatedHttpClient = s_factory.CreateClient();
 
-        string authenticationJwtToken = GetAuthenticationJwtToken(_authenticatedHttpClient).Result;
-        _authenticatedHttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + authenticationJwtToken);
+        string authenticationJwtToken = GetAuthenticationJwtToken(s_authenticatedHttpClient).Result;
+        s_authenticatedHttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + authenticationJwtToken);
     }
 
     #region POST/GET/PUT/DELETE
@@ -44,30 +38,21 @@ public class AccountTests : WebApplicationFactory<Program>
     [TestMethod]
     public async Task Create_Get_Update_Delete_Account_OK()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         // POST Account
 
-        var simpleAccountDto = new SimpleAccountDto
-        {
-            Email = _temporaryEmail,
-            Password = _password,
-            Name = _Name,
-            Surname = _Surname,
-            Title = _title
-        };
-
-        HttpResponseMessage createAccountResponse = await _authenticatedHttpClient.PostAsJsonAsync("api/account", simpleAccountDto);
+        HttpResponseMessage createAccountResponse = await s_authenticatedHttpClient.PostAsJsonAsync("api/account", ObjectHelper.GetSimpleAccountDto());
         Assert.AreEqual(HttpStatusCode.Created, createAccountResponse.StatusCode);
 
         string createAccountResponseString = await createAccountResponse.Content.ReadAsStringAsync();
         var newAccountDto = JsonConvert.DeserializeObject<AccountDto>(createAccountResponseString);
-        Assert.AreEqual(_temporaryEmail, newAccountDto.Email);
+        Assert.AreEqual(ObjectHelper.Mail, newAccountDto.Email);
         Assert.IsNotNull(newAccountDto.UUID);
 
         // GET Account
 
-        HttpResponseMessage getAccountResponse = await _authenticatedHttpClient.GetAsync("api/account/" + newAccountDto.UUID);
+        HttpResponseMessage getAccountResponse = await s_authenticatedHttpClient.GetAsync("api/account/" + newAccountDto.UUID);
         Assert.AreEqual(HttpStatusCode.OK, getAccountResponse.StatusCode);
 
         string getAccountResponseString = await getAccountResponse.Content.ReadAsStringAsync();
@@ -78,97 +63,89 @@ public class AccountTests : WebApplicationFactory<Program>
 
         // PUT Account
 
-        var updateAccountDto = new UpdateAccountDto
-        {
-            Email = _temporaryEmail,
-            Name = _updatedName,
-            Surname = _updatedSurname,
-            Title = _updatedTitle
-        };
-
-        HttpResponseMessage updateAccountResponse = await _authenticatedHttpClient.PutAsJsonAsync("api/account/" + newAccountDto.UUID, updateAccountDto);
+        HttpResponseMessage updateAccountResponse = await s_authenticatedHttpClient.PutAsJsonAsync("api/account/" + newAccountDto.UUID, ObjectHelper.GetUpdateAccountDto());
         Assert.AreEqual(HttpStatusCode.OK, updateAccountResponse.StatusCode);
 
         string updateAccountResponseString = await updateAccountResponse.Content.ReadAsStringAsync();
         var updatedAccountDto = JsonConvert.DeserializeObject<AccountDto>(updateAccountResponseString);
-        Assert.AreEqual(_updatedName, updatedAccountDto.Name);
-        Assert.AreEqual(_updatedSurname, updatedAccountDto.Surname);
+        Assert.AreEqual(ObjectHelper.UpdatedName, updatedAccountDto.Name);
+        Assert.AreEqual(ObjectHelper.UpdatedSurname, updatedAccountDto.Surname);
 
         // DELETE Account
 
-        HttpResponseMessage deleteAccountResponse = await _authenticatedHttpClient.DeleteAsync("api/account/" + newAccountDto.UUID);
+        HttpResponseMessage deleteAccountResponse = await s_authenticatedHttpClient.DeleteAsync("api/account/" + newAccountDto.UUID);
         Assert.AreEqual(HttpStatusCode.OK, deleteAccountResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Get_Account_NoContent()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
-        HttpResponseMessage getAccountResponse = await _authenticatedHttpClient.GetAsync("api/account/" + Guid.NewGuid());
+        HttpResponseMessage getAccountResponse = await s_authenticatedHttpClient.GetAsync("api/account/" + Guid.NewGuid());
         Assert.AreEqual(HttpStatusCode.NoContent, getAccountResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Get_Account_BadRequest()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
-        HttpResponseMessage getAccountResponse = await _authenticatedHttpClient.GetAsync("api/account/" + Guid.Empty);
+        HttpResponseMessage getAccountResponse = await s_authenticatedHttpClient.GetAsync("api/account/" + Guid.Empty);
         Assert.AreEqual(HttpStatusCode.BadRequest, getAccountResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Create_Account_BadRequest()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         var simpleAccountDto = new SimpleAccountDto
         {
             Email = string.Empty
         };
 
-        HttpResponseMessage createAccountResponse = await _authenticatedHttpClient.PostAsJsonAsync("api/account", simpleAccountDto);
+        HttpResponseMessage createAccountResponse = await s_authenticatedHttpClient.PostAsJsonAsync("api/account", simpleAccountDto);
         Assert.AreEqual(HttpStatusCode.BadRequest, createAccountResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Create_Account_Conflict()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         var simpleAccountDto = new SimpleAccountDto
         {
-            Email = _email,
-            Password = _password,
-            Name = _Name,
-            Surname = _Surname
+            Email = AdminEmail,
+            Password = AdminPassword,
+            Name = ObjectHelper.Name,
+            Surname = ObjectHelper.Surname
         };
 
-        HttpResponseMessage createAccountResponse = await _authenticatedHttpClient.PostAsJsonAsync("api/account", simpleAccountDto);
+        HttpResponseMessage createAccountResponse = await s_authenticatedHttpClient.PostAsJsonAsync("api/account", simpleAccountDto);
         Assert.AreEqual(HttpStatusCode.Conflict, createAccountResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Update_Account_BadRequest()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         var updateAccountDto = new UpdateAccountDto
         {
             Email = string.Empty
         };
 
-        HttpResponseMessage updateAccountResponse = await _authenticatedHttpClient.PutAsJsonAsync("api/account/" + Guid.NewGuid(), updateAccountDto);
+        HttpResponseMessage updateAccountResponse = await s_authenticatedHttpClient.PutAsJsonAsync("api/account/" + Guid.NewGuid(), updateAccountDto);
         Assert.AreEqual(HttpStatusCode.BadRequest, updateAccountResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Delete_Account_BadRequest()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
-        HttpResponseMessage updateAccountResponse = await _authenticatedHttpClient.DeleteAsync("api/account/" + Guid.Empty);
+        HttpResponseMessage updateAccountResponse = await s_authenticatedHttpClient.DeleteAsync("api/account/" + Guid.Empty);
         Assert.AreEqual(HttpStatusCode.BadRequest, updateAccountResponse.StatusCode);
     }
 
@@ -179,15 +156,15 @@ public class AccountTests : WebApplicationFactory<Program>
     [TestMethod]
     public async Task Authenticate_OK()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         var authenticationDto = new AuthenticationDto
         {
-            Email = _email,
-            Password = _password
+            Email = AdminEmail,
+            Password = AdminPassword
         };
 
-        HttpResponseMessage authenticationResponse = await _regularHttpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);
+        HttpResponseMessage authenticationResponse = await s_regularHttpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);
         Assert.AreEqual(HttpStatusCode.OK, authenticationResponse.StatusCode);
 
         string result = await authenticationResponse.Content.ReadAsStringAsync();
@@ -197,29 +174,29 @@ public class AccountTests : WebApplicationFactory<Program>
     [TestMethod]
     public async Task Authenticate_Unauthorized()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         var authenticationDto = new AuthenticationDto
         {
-            Email = _email,
+            Email = AdminEmail,
             Password = "incorrectPassword"
         };
 
-        HttpResponseMessage authenticationResponse = await _regularHttpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);
+        HttpResponseMessage authenticationResponse = await s_regularHttpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);
         Assert.AreEqual(HttpStatusCode.Unauthorized, authenticationResponse.StatusCode);
     }
 
     [TestMethod]
     public async Task Authenticate_BadRequest()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
         var authenticationDto = new AuthenticationDto
         {
             Email = string.Empty
         };
 
-        HttpResponseMessage authenticationResponse = await _regularHttpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);
+        HttpResponseMessage authenticationResponse = await s_regularHttpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);
         Assert.AreEqual(HttpStatusCode.BadRequest, authenticationResponse.StatusCode);
     }
 
@@ -228,9 +205,9 @@ public class AccountTests : WebApplicationFactory<Program>
     [TestMethod]
     public async Task GetAllAccounts_OK()
     {
-        _testContext.WriteLine(_testContext.TestName);
+        s_testContext.WriteLine(s_testContext.TestName);
 
-        HttpResponseMessage getAllAccountsResponse = await _authenticatedHttpClient.GetAsync("api/account");
+        HttpResponseMessage getAllAccountsResponse = await s_authenticatedHttpClient.GetAsync("api/account");
 
         Assert.AreEqual(HttpStatusCode.OK, getAllAccountsResponse.StatusCode);
 
@@ -244,8 +221,8 @@ public class AccountTests : WebApplicationFactory<Program>
     {
         var authenticationDto = new AuthenticationDto
         {
-            Email = _email,
-            Password = _password
+            Email = AdminEmail,
+            Password = AdminPassword
         };
 
         HttpResponseMessage authenticationResponse = await httpClient.PostAsJsonAsync("api/account/authentication", authenticationDto);

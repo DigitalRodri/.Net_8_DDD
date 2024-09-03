@@ -55,7 +55,7 @@ namespace Testing.UnitTests.Controllers
             _authenticationDto = ObjectHelper.GetAuthenticationDto();
             _argumentException = ObjectHelper.GetArgumentException();
             _duplicateNameException = ObjectHelper.GetDuplicateNameException();
-            _jwtToken = ObjectHelper._jwtToken;
+            _jwtToken = ObjectHelper.JwtToken;
         }
 
         #region GetAllAccounts

@@ -55,7 +55,7 @@ namespace Testing.UnitTests.Services
             _simpleAccountDto = ObjectHelper.GetSimpleAccountDto();
             _updateAccountDto = ObjectHelper.GetUpdateAccountDto();
             _authenticationDto = ObjectHelper.GetAuthenticationDto();
-            _jwtToken = ObjectHelper._jwtToken;
+            _jwtToken = ObjectHelper.JwtToken;
         }
 
         #region GetAllAccounts
