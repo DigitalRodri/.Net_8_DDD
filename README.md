@@ -8,6 +8,7 @@ Migrated from this .NET Framework 4.8.1 project: https://github.com/DigitalRodri
 
 Contains:
 * Basic CRUD operations using Entity Framework Core V8 with SQLServer
+  *   Connection with Azure SQLServer available in *azure* branch
 * Dependency injection
 * Entity-Dto mapping using Automapper
 * Language handling using Resources file
