@@ -1,4 +1,5 @@
 using ApplicationCore.Middleware;
+using Azure.Identity;
 using Domain.Helpers;
 using Domain.Interfaces;
 using Domain.Profiles;
@@ -19,6 +20,9 @@ var Configuration = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
     .Build();
 
+var keyVaultEndpoint = new Uri(Configuration["Keys:VaultUri"]);
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+
 builder.Services.AddSystemWebAdapters();
 
 // Add services to the container.
@@ -27,8 +31,10 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+string DDDConnectionString = builder.Configuration["DDD-Connection-String"];
 builder.Services.AddDbContext<DDDContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DDDConnectionString")));
+                options.UseSqlServer(DDDConnectionString));
 builder.Services.AddScoped<DDDContext>();
 
 // Dependency injection
