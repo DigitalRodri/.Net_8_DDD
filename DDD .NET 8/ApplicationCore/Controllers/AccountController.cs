@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using ApplicationCore.Helpers;
+using Domain.DTOs;
 using Domain.Interfaces;
 using Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace Application.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly ILogger _logger;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
         {
             _accountService = accountService;
+            _logger = logger;
         }
 
         [Authorize]
@@ -32,7 +35,8 @@ namespace Application.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
+                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
@@ -49,11 +53,13 @@ namespace Application.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
                 return BadRequest(ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
+                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
@@ -68,15 +74,18 @@ namespace Application.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(LoggerHelper.GetExceptionLog(ex));
                 return BadRequest(ex);
             }
             catch (DuplicateNameException ex)
             {
+                _logger.LogWarning(LoggerHelper.GetExceptionLog(ex));
                 return Conflict(ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
+                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
@@ -91,11 +100,13 @@ namespace Application.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(LoggerHelper.GetExceptionLog(ex));
                 return BadRequest(ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
+                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
@@ -110,11 +121,13 @@ namespace Application.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(LoggerHelper.GetExceptionLog(ex));
                 return BadRequest(ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
+                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
@@ -132,11 +145,13 @@ namespace Application.Controllers
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning(LoggerHelper.GetExceptionLog(ex));
                 return BadRequest(ex);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                _logger.LogCritical(LoggerHelper.GetExceptionLog(ex));
+                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 

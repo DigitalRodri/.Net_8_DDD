@@ -8,6 +8,7 @@ using Infrastructure.Repository.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,11 @@ var Configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
     .Build();
+
+// Inject the Logger
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddTraceSource(new SourceSwitch("trace", "verbose"), new TextWriterTraceListener(Path.Combine(builder.Environment.ContentRootPath, builder.Environment.ApplicationName + "Log.log")));
 
 builder.Services.AddSystemWebAdapters();
 

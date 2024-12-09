@@ -5,6 +5,7 @@ using Domain.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Data;
@@ -30,6 +31,7 @@ namespace Testing.UnitTests.Controllers
         private AuthenticationDto _authenticationDto;
         private ArgumentException _argumentException;
         private DuplicateNameException _duplicateNameException;
+        private Mock<ILogger<AccountController>> _logger;
         private string _jwtToken;
 
         [TestInitialize]
@@ -37,6 +39,7 @@ namespace Testing.UnitTests.Controllers
         {
             _accountService = new Mock<IAccountService>();
             _httpRequest = new Mock<HttpRequest>();
+            _logger = new Mock<ILogger<AccountController>>();
 
             _httpRequest.Setup(x => x.Scheme).Returns("http");
             _httpRequest.Setup(x => x.Host).Returns(HostString.FromUriComponent("localhost:8080"));
@@ -45,7 +48,7 @@ namespace Testing.UnitTests.Controllers
             _httpContext = Mock.Of<HttpContext>(x => x.Request == _httpRequest.Object);
             _controllerContext = new ControllerContext() { HttpContext = _httpContext };
 
-            _accountController = new AccountController(_accountService.Object) { ControllerContext = _controllerContext };
+            _accountController = new AccountController(_accountService.Object, _logger.Object) { ControllerContext = _controllerContext };
 
             _id = Guid.NewGuid();
             _accountDto = ObjectHelper.GetAccountDto();
