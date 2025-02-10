@@ -8,10 +8,21 @@ using Infrastructure.Repository.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Inject Serilog
+string logPath = Directory.GetParent(builder.Environment.ContentRootPath) + "\\Logs\\"+ builder.Environment.ApplicationName + "-.log";
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(
+        path: logPath,
+        outputTemplate: builder.Environment.ApplicationName + "||{Timestamp:yyyy-MM-dd HH:mm:ss}||{Level}||||{Message}{NewLine}{Exception}",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 5,
+        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
+    .CreateLogger();
 
 // Get current environment appsettings.json file
 string environment = builder.Environment.EnvironmentName;
@@ -20,10 +31,7 @@ var Configuration = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true)
     .Build();
 
-// Inject the Logger
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddTraceSource(new SourceSwitch("trace", "verbose"), new TextWriterTraceListener(Path.Combine(builder.Environment.ContentRootPath, builder.Environment.ApplicationName + "Log.log")));
+builder.Services.AddSerilog();
 
 builder.Services.AddSystemWebAdapters();
 
