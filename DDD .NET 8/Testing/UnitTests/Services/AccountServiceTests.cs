@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
+using Domain.Helpers;
 using Domain.Interfaces;
 using Domain.Profiles;
 using Domain.Services;
@@ -64,10 +65,10 @@ namespace Testing.UnitTests.Services
         public void GetAllAccounts_Success()
         {
             _accountRepository.Setup(x => x.GetAllAccounts()).Returns(_accountList);
-            IEnumerable<AccountDto> result = _accountService.GetAllAccounts();
+            Response<IEnumerable<AccountDto>> result = _accountService.GetAllAccounts();
 
-            Assert.AreEqual(_accountList.FirstOrDefault().Name, result.FirstOrDefault().Name);
-            Assert.AreEqual(_accountList.FirstOrDefault().Surname, result.FirstOrDefault().Surname);
+            Assert.AreEqual(_accountList.FirstOrDefault().Name, result.Content.FirstOrDefault().Name);
+            Assert.AreEqual(_accountList.FirstOrDefault().Surname, result.Content.FirstOrDefault().Surname);
         }
 
         #endregion

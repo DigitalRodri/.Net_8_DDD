@@ -66,10 +66,10 @@ namespace Testing.UnitTests.Controllers
         [TestMethod]
         public void GetAllAccounts_Success()
         {
-            _accountService.Setup(x => x.GetAllAccounts()).Returns(_accountDtoList);
-            ActionResult<AccountDto> result = _accountController.GetAllAccounts();
+            _accountService.Setup(x => x.GetAllAccounts()).Returns(ObjectHelper.GetResponse<IEnumerable<AccountDto>>(_accountDtoList));
+            IActionResult result = _accountController.GetAllAccounts();
 
-            OkObjectResult objectResult = result.Result as OkObjectResult;
+            ObjectResult objectResult = result as ObjectResult;
             Assert.AreEqual((int)HttpStatusCode.OK, objectResult.StatusCode);
             IEnumerable<AccountDto> accountDtoResult = objectResult.Value as IEnumerable<AccountDto>;
             Assert.IsTrue(accountDtoResult.Count() > 0);
@@ -79,9 +79,9 @@ namespace Testing.UnitTests.Controllers
         public void GetAllAccounts_Exception()
         {
             _accountService.Setup(x => x.GetAllAccounts()).Throws(new Exception());
-            ActionResult<AccountDto> result = _accountController.GetAllAccounts();
+            IActionResult result = _accountController.GetAllAccounts();
 
-            ObjectResult objectResult = result.Result as ObjectResult;
+            ObjectResult objectResult = result as ObjectResult;
             Assert.AreEqual((int)HttpStatusCode.InternalServerError, objectResult.StatusCode);
         }
 

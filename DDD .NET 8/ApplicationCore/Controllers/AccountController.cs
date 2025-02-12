@@ -38,8 +38,7 @@ namespace Application.Controllers
                     return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
 
 
-                ActionResult x = response.CreateHttpResponse();
-                return x;
+                return response.CreateHttpResponse();
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿using Domain.DTOs;
 using Domain.Entities;
+using Domain.Helpers;
 using Domain.Resources;
 using System.Data;
 
@@ -17,6 +18,11 @@ namespace Testing.Helpers
         public const string UpdatedSurname = "Lovelace";
         public const string UpdatedTitle = "mrs";
         public const string JwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE3MjAzNjUwNjAsImV4cCI6MTcyMDM2Njg2MCwiaWF0IjoxNzIwMzY1MDYwLCJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyJ9.Z4FSZWMPNjHe42lBpZdOGldVE40tF_Tn-sY1OPD_7rg";
+
+        public static Response<T> GetResponse<T>(T content)
+        {
+            return new Response<T>(content);
+        }
 
         public static Account GetAccount()
         {

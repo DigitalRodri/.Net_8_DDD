@@ -27,6 +27,7 @@ namespace Domain.Helpers
         public Response(T content)
         {
             Content = content;
+            _resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
         }
 
         public Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = true, string[] arguments = null)
