@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.DTOs;
 using Domain.Entities;
+using Domain.Helpers;
 using Domain.Interfaces;
 using System.Data;
 
@@ -19,11 +20,14 @@ namespace Domain.Services
             _autoMapper = mapper;
         }
 
-        public IEnumerable<AccountDto> GetAllAccounts()
+        public Response<IEnumerable<AccountDto>> GetAllAccounts()
         {
-            IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
+            Response<IEnumerable<AccountDto>> accountListResponse = new Response<IEnumerable<AccountDto>>();
 
-            return _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
+            IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
+            accountListResponse.Content = _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
+
+            return accountListResponse;
         }
 
         public AccountDto GetAccount(Guid UUID)

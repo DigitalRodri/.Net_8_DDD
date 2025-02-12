@@ -1,10 +1,12 @@
 ﻿using ApplicationCore.Helpers;
 using Domain.DTOs;
+using Domain.Helpers;
 using Domain.Interfaces;
 using Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 
 namespace Application.Controllers
@@ -24,14 +26,20 @@ namespace Application.Controllers
 
         [Authorize]
         [HttpGet()]
-        public ActionResult<AccountDto> GetAllAccounts()
+        public IActionResult GetAllAccounts()
         {
+            Response<IEnumerable<AccountDto>> response = new Response<IEnumerable<AccountDto>>();
+
             try
             {
-                IEnumerable<AccountDto> accountDTOList = _accountService.GetAllAccounts();
+                response = _accountService.GetAllAccounts();
 
-                if (accountDTOList.Count() == 0) return NoContent();
-                return Ok(accountDTOList);
+                if (!response.Content.IsNullOrEmpty() && response.Content.Count() == 0) 
+                    return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
+
+
+                ActionResult x = response.CreateHttpResponse();
+                return x;
             }
             catch (Exception ex)
             {
@@ -136,7 +144,7 @@ namespace Application.Controllers
         public ActionResult<string> Authenticate(AuthenticationDto authenticationDto)
         {
             try
-            {
+            {  
                 string result = _accountService.Authenticate(authenticationDto);
 
                 if (String.IsNullOrEmpty(result))

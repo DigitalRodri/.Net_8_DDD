@@ -50,7 +50,6 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
 builder.Services.AddAutoMapper(typeof(AccountProfile));
-
 var issuerSigningKey = Configuration["Keys:IssuerSigningKey"];
 var validIssuer = Configuration["Keys:ValidIssuer"];
 

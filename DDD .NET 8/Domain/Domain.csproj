@@ -32,8 +32,10 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
 		<PackageReference Include="Microsoft.CSharp" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
 		<PackageReference Include="System.ComponentModel.Annotations" />
 		<PackageReference Include="System.CodeDom" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
