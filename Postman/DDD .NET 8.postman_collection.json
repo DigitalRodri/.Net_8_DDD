@@ -9,7 +9,8 @@
 		{
 			"name": "AllAccounts",
 			"protocolProfileBehavior": {
-				"strictSSL": false
+				"protocolVersion": "http1",
+				"followOriginalHttpMethod": false
 			},
 			"request": {
 				"auth": {
@@ -17,7 +18,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -57,7 +58,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -72,7 +73,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:65257/api/account/ef468307-8289-4dba-a81b-08dc9a09adba",
+					"raw": "http://localhost:65257/api/account/DE02439C-4C00-4457-AEFE-91A7FAE97EFF",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -81,7 +82,7 @@
 					"path": [
 						"api",
 						"account",
-						"ef468307-8289-4dba-a81b-08dc9a09adba"
+						"DE02439C-4C00-4457-AEFE-91A7FAE97EFF"
 					]
 				}
 			},
@@ -95,7 +96,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -117,7 +118,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Email\": \"mail16@mail.com\",\r\n    \"Name\": \"Name\",\r\n    \"Surname\": \"Surname\",\r\n    \"Title\": \"Mr\",\r\n    \"Password\": \"YourPassword123\"\r\n}",
+					"raw": "{\r\n    \"Email\": \"accountController@integrationtest.com\",\r\n    \"Name\": \"Name\",\r\n    \"Surname\": \"Surname\",\r\n    \"Title\": \"Mr\",\r\n    \"Password\": \"password\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -141,13 +142,18 @@
 		},
 		{
 			"name": "Account",
+			"protocolProfileBehavior": {
+				"followRedirects": true,
+				"followOriginalHttpMethod": false,
+				"disableUrlEncoding": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -157,7 +163,8 @@
 					{
 						"key": "Accept-Language",
 						"value": "es-ES",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
@@ -170,7 +177,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:65257/api/account/e3f3dbb6-aec8-4189-6cd5-08dc9a034769",
+					"raw": "http://localhost:65257/api/account/ef468307-8289-4dba-a81b-08dc9a09adba",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -179,7 +186,7 @@
 					"path": [
 						"api",
 						"account",
-						"e3f3dbb6-aec8-4189-6cd5-08dc9a034769"
+						"ef468307-8289-4dba-a81b-08dc9a09adba"
 					]
 				}
 			},
@@ -193,7 +200,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyIsImlhdCI6MTcxOTY4Njc4OSwiZXhwIjoxNzUxMjIyNzg5LCJhdWQiOiIiLCJzdWIiOiIifQ.oumBZYHRbwuh9gqtac8DeV-Crr4z65clhkBQ1kWqScA",
+							"value": "{{accessToken}}",
 							"type": "string"
 						}
 					]
@@ -215,6 +222,100 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('accessToken', pm.response.text());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE3MzIyMjQzNjAsImV4cCI6MTczMjIyNjE2MCwiaWF0IjoxNzMyMjI0MzYwLCJpc3MiOiJSb2RyaWdvIEVzY3JpYmFubyJ9.SJiMwfzDoP7twS2xYknqvke7P55YL3tFS5Hrvg3N9MA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept-Language",
+						"value": "es-ES",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"mail16@mail.com\",\r\n    \"Password\": \"YourPassword123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:65257/api/account/authentication",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "65257",
+					"path": [
+						"api",
+						"account",
+						"authentication"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

@@ -37,7 +37,6 @@ namespace Application.Controllers
                 if (!response.Content.IsNullOrEmpty() && response.Content.Count() == 0) 
                     return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
 
-
                 return response.CreateHttpResponse();
             }
             catch (Exception ex)
