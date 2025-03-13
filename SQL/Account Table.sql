@@ -1,9 +1,13 @@
-DROP TABLE [account].[Account]
+CREATE DATABASE DDD
+
+USE DDD
+
+CREATE SCHEMA account
 
 CREATE TABLE [account].[Account](
 	UUID UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
 	Email varchar(50) NOT NULL,
-	Password BINARY(32) NOT NULL,
+	Password varchar(128) NOT NULL,
 	Name varchar(25) NOT NULL,
 	Surname varchar(25) NOT NULL,
 	Title varchar(5) NULL,

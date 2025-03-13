@@ -1,0 +1,15 @@
+{
+    "Email": "accountController@integrationtest.com",
+    "Name": "Name",
+    "Surname": "Surname",
+    "Title": "Mr",
+    "Password": "password"
+}
+
+{
+    "Email": "email@admin.com",
+    "Name": "Name",
+    "Surname": "Surname",
+    "Title": "Mr",
+    "Password": "password"
+}
