@@ -79,6 +79,15 @@ namespace Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter &apos;{0}&apos; has its default value.
+        /// </summary>
+        public static string DefaultValue {
+            get {
+                return ResourceManager.GetString("DefaultValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The input password was incorrect.
         /// </summary>
         public static string IncorrectPassword {

@@ -4,6 +4,8 @@ using Domain.Entities;
 using Domain.Helpers;
 using Domain.Interfaces;
 using System.Data;
+using System.Net;
+using System.Reflection;
 
 namespace Domain.Services
 {
@@ -31,7 +33,9 @@ namespace Domain.Services
 
         public Response<AccountDto> GetAccount(Guid UUID)
         {
-            ValidateUUID(UUID);
+            Response<Guid> uuidValidation = ValidateUuidDResponse(UUID);
+            if (uuidValidation.HasError)
+                return Response<AccountDto>.AddError(uuidValidation.Errors);
 
             Account account = _accountRepository.GetAccount(UUID);
 
@@ -85,6 +89,13 @@ namespace Domain.Services
         }
 
         #region Private methods
+
+        private static Response<Guid> ValidateUuidDResponse(Guid UUID)
+        {
+            if (UUID == Guid.Empty)
+                return Response<Guid>.AddError(nameof(Resources.Resources.NullParameter), HttpStatusCode.BadRequest, MethodBase.GetCurrentMethod().Name, arguments: ["uuid"]);
+            return null;
+        }
 
         private static void ValidateUUID(Guid UUID)
         {

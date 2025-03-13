@@ -10,7 +10,6 @@ namespace Domain.Helpers
     {
         private readonly ILogger _logger;
         private readonly List<Error> _errorList = new List<Error>();
-        private readonly ResourceManager _resourceManager;
 
         public T Content { get; }
         public IEnumerable<Error> Errors => _errorList.AsReadOnly();
@@ -19,42 +18,36 @@ namespace Domain.Helpers
         private Response(T content)
         {
             Content = content;
-            _resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
+        }
+
+        private Response(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = true, string[] arguments = null)
+        {
+            ResourceManager resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
+
+            var errorMessage = resourceManager.GetString(errorName);
+            var error = new Error(errorName, errorMessage, httpStatusCode, callerMemberName, arguments);
+            _errorList.Add(error);
+        }
+
+        private Response(IEnumerable<Error> errors)
+        {
+            _errorList.AddRange(errors);
         }
 
         public static Response<T> AddContent(T content) => new(content);
 
         public static implicit operator Response<T>(T content) => AddContent(content);
 
+        public static Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = true, string[] arguments = null) => new(errorName, httpStatusCode, callerMemberName, printError, arguments);
 
-        public Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = true, string[] arguments = null)
-        {
-            string errorMessage = _resourceManager.GetString(errorName);
-            Error error = new Error(errorName, errorMessage, httpStatusCode, callerMemberName, arguments);
-            _errorList.Add(error);
-
-            //if (printError)
-            //    _logger.LogError(error.ToString(), TraceEventType.Critical);
-
-            return this;
-        }
-
-        public Response<T> AddErrors<TK>(Response<TK> response)
-        {
-            if (response != null)
-            {
-                _errorList.AddRange(response.Errors);
-            }
-
-            return this;
-        }
+        public static Response<T> AddError(IEnumerable<Error> errors) => new(errors);
 
         public ActionResult CreateHttpResponse(HttpStatusCode successHttpStatusCode = HttpStatusCode.OK)
         {
             if (HasError)
             {
-                Error error = Errors.FirstOrDefault();
-                ResponseError responseError = new ResponseError(error);
+                var error = Errors.FirstOrDefault();
+                var responseError = new ResponseError(error);
 
                 return new ObjectResult(responseError)
                 {

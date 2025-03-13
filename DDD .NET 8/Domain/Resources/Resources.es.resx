@@ -126,6 +126,9 @@
   <data name="NullParameter" xml:space="preserve">
     <value>El parámetro '{0}' es nulo</value>
   </data>
+  <data name="DefaultValue" xml:space="preserve">
+    <value>El parámetro '{0}' tiene su valor por defecto</value>
+  </data>
   <data name="TitleLengthError" xml:space="preserve">
     <value>El Título '{0}' tiene que tener 5 caracteres o menos</value>
   </data>
