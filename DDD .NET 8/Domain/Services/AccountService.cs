@@ -22,21 +22,21 @@ namespace Domain.Services
 
         public Response<IEnumerable<AccountDto>> GetAllAccounts()
         {
-            Response<IEnumerable<AccountDto>> accountListResponse = new Response<IEnumerable<AccountDto>>();
-
             IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
-            accountListResponse.Content = _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
+            var accountListDto = _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
 
+            var accountListResponse = Response<IEnumerable<AccountDto>>.AddContent(accountListDto);
             return accountListResponse;
         }
 
-        public AccountDto GetAccount(Guid UUID)
+        public Response<AccountDto> GetAccount(Guid UUID)
         {
             ValidateUUID(UUID);
 
             Account account = _accountRepository.GetAccount(UUID);
 
-            return _autoMapper.Map<AccountDto>(account);
+            Response<AccountDto> accountResponse = _autoMapper.Map<AccountDto>(account);
+            return accountResponse;
         }
 
         public AccountDto CreateAccount(SimpleAccountDto simpleAccountDto)
@@ -88,19 +88,19 @@ namespace Domain.Services
 
         private static void ValidateUUID(Guid UUID)
         {
-            if (UUID == Guid.Empty) 
+            if (UUID == Guid.Empty)
                 throw new ArgumentException(String.Format(Resources.Resources.NullParameter, nameof(UUID)));
         }
 
         private static void ValidateSimpleAccountDto(SimpleAccountDto simpleAccountDto)
         {
-            if (string.IsNullOrEmpty(simpleAccountDto.Email)) 
+            if (string.IsNullOrEmpty(simpleAccountDto.Email))
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(simpleAccountDto.Email)));
-            if (string.IsNullOrEmpty(simpleAccountDto.Name)) 
+            if (string.IsNullOrEmpty(simpleAccountDto.Name))
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(simpleAccountDto.Name)));
-            if (string.IsNullOrEmpty(simpleAccountDto.Surname)) 
+            if (string.IsNullOrEmpty(simpleAccountDto.Surname))
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(simpleAccountDto.Surname)));
-            if (string.IsNullOrEmpty(simpleAccountDto.Password)) 
+            if (string.IsNullOrEmpty(simpleAccountDto.Password))
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(simpleAccountDto.Password)));
             if (!string.IsNullOrEmpty(simpleAccountDto.Title) && simpleAccountDto.Title.Length > 5)
                 throw new ArgumentException(String.Format(Resources.Resources.TitleLengthError, simpleAccountDto.Title));

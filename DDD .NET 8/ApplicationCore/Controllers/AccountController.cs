@@ -24,7 +24,7 @@ namespace ApplicationCore.Controllers
             {
                 Response<IEnumerable<AccountDto>> response = accountService.GetAllAccounts();
 
-                if (!response.Content.IsNullOrEmpty() && response.Content.Any())
+                if (!response.Content.IsNullOrEmpty() && !response.Content.Any())
                     return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
 
                 return response.CreateHttpResponse();
@@ -38,14 +38,16 @@ namespace ApplicationCore.Controllers
 
         [Authorize]
         [HttpGet("{UUID}")]
-        public ActionResult<AccountDto> GetAccount(Guid UUID)
+        public ActionResult<AccountDto> GetAccount(Guid uuid)
         {
             try
             {
-                var accountDto = accountService.GetAccount(UUID);
+                Response<AccountDto> response = accountService.GetAccount(uuid);
 
-                if (accountDto == null) return NoContent();
-                return Ok(accountDto);
+                if (response.Content == null)
+                    return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
+
+                return response.CreateHttpResponse();
             }
             catch (ArgumentException ex)
             {
