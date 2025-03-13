@@ -129,9 +129,6 @@
   <data name="DefaultValue" xml:space="preserve">
     <value>The parameter '{0}' has its default value</value>
   </data>
-  <data name="TitleLengthError" xml:space="preserve">
-    <value>The Title '{0}' must have 5 characters or less</value>
-  </data>
   <data name="NoAuthorization" xml:space="preserve">
     <value>The request must contain an Authorization JWT Bearer Token</value>
   </data>
@@ -140,5 +137,11 @@
   </data>
   <data name="IncorrectPassword" xml:space="preserve">
     <value>The input password was incorrect</value>
+  </data>
+  <data name="TitleLengthError" xml:space="preserve">
+    <value>The Title '{0}' must have 5 characters or less</value>
+  </data>
+  <data name="SqlError" xml:space="preserve">
+    <value>There was an SQL error: '{0}'</value>
   </data>
 </root>

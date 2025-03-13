@@ -124,6 +124,15 @@ namespace Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an SQL error: &apos;{0}&apos;.
+        /// </summary>
+        public static string SqlError {
+            get {
+                return ResourceManager.GetString("SqlError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Title &apos;{0}&apos; must have 5 characters or less.
         /// </summary>
         public static string TitleLengthError {

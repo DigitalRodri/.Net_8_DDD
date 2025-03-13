@@ -129,9 +129,6 @@
   <data name="DefaultValue" xml:space="preserve">
     <value>El parámetro '{0}' tiene su valor por defecto</value>
   </data>
-  <data name="TitleLengthError" xml:space="preserve">
-    <value>El Título '{0}' tiene que tener 5 caracteres o menos</value>
-  </data>
   <data name="NoAuthorization" xml:space="preserve">
     <value>La petición debe contener un Token Bearer JWT de Autenticación</value>
   </data>
@@ -140,5 +137,11 @@
   </data>
   <data name="IncorrectPassword" xml:space="preserve">
     <value>La contraseña es incorrecta</value>
+  </data>
+  <data name="TitleLengthError" xml:space="preserve">
+    <value>El Título '{0}' tiene que tener 5 caracteres o menos</value>
+  </data>
+  <data name="SqlError" xml:space="preserve">
+    <value>Ha habido un error de SQL: '{0}'</value>
   </data>
 </root>

@@ -5,7 +5,6 @@ using Domain.Helpers;
 using Domain.Interfaces;
 using System.Data;
 using System.Net;
-using System.Reflection;
 
 namespace Domain.Services
 {
@@ -24,23 +23,25 @@ namespace Domain.Services
 
         public Response<IEnumerable<AccountDto>> GetAllAccounts()
         {
-            IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
-            var accountListDto = _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
+            Response<IEnumerable<Account>> accountList = _accountRepository.GetAllAccounts();
+            if (accountList.HasError)
+                return Response<IEnumerable<AccountDto>>.AddError(accountList.Errors);
 
-            var accountListResponse = Response<IEnumerable<AccountDto>>.AddContent(accountListDto);
-            return accountListResponse;
+            var accountListDto = _autoMapper.Map<IEnumerable<AccountDto>>(accountList.Content);
+            return Response<IEnumerable<AccountDto>>.AddContent(accountListDto);
         }
 
         public Response<AccountDto> GetAccount(Guid UUID)
         {
-            Response<Guid> uuidValidation = ValidateUuidDResponse(UUID);
+            Response<bool> uuidValidation = ValidateUuid(UUID);
             if (uuidValidation.HasError)
                 return Response<AccountDto>.AddError(uuidValidation.Errors);
 
-            Account account = _accountRepository.GetAccount(UUID);
+            Response<Account> account = _accountRepository.GetAccount(UUID);
+            if (account.HasError)
+                return Response<AccountDto>.AddError(account.Errors);
 
-            Response<AccountDto> accountResponse = _autoMapper.Map<AccountDto>(account);
-            return accountResponse;
+            return _autoMapper.Map<AccountDto>(account.Content);
         }
 
         public AccountDto CreateAccount(SimpleAccountDto simpleAccountDto)
@@ -90,11 +91,9 @@ namespace Domain.Services
 
         #region Private methods
 
-        private static Response<Guid> ValidateUuidDResponse(Guid UUID)
+        private static Response<bool> ValidateUuid(Guid uuid)
         {
-            if (UUID == Guid.Empty)
-                return Response<Guid>.AddError(nameof(Resources.Resources.NullParameter), HttpStatusCode.BadRequest, MethodBase.GetCurrentMethod().Name, arguments: ["uuid"]);
-            return null;
+            return uuid == Guid.Empty ? Response<bool>.AddError(nameof(Resources.Resources.NullParameter), HttpStatusCode.BadRequest, arguments: ["uuid"]) : Response<bool>.AddContent(true);
         }
 
         private static void ValidateUUID(Guid UUID)

@@ -37,7 +37,7 @@ namespace ApplicationCore.Controllers
         }
 
         [Authorize]
-        [HttpGet("{UUID}")]
+        [HttpGet("{uuid}")]
         public ActionResult<AccountDto> GetAccount(Guid uuid)
         {
             try
@@ -48,11 +48,6 @@ namespace ApplicationCore.Controllers
                     return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
 
                 return response.CreateHttpResponse();
-            }
-            catch (ArgumentException ex)
-            {
-                logger.LogCritical(ex.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetBadRequestErrorMessage());
             }
             catch (Exception ex)
             {

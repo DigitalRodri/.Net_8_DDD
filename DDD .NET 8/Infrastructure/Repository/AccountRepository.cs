@@ -1,60 +1,71 @@
 ﻿using Domain.Entities;
+using Domain.Helpers;
 using Domain.Interfaces;
+using Domain.Resources;
 using Infrastructure.Repository.Models;
+using System.Net;
+using System.Reflection;
 
 namespace Infrastructure.Repository
 {
-    public class AccountRepository : IAccountRepository
+    public class AccountRepository(DDDContext dddContext) : IAccountRepository
     {
-        private readonly DDDContext _dddContext;
-
-        public AccountRepository(DDDContext dddContext)
+        public Response<IEnumerable<Account>> GetAllAccounts()
         {
-            _dddContext = dddContext;
+            try
+            {
+                return dddContext.Accounts;
+            }
+            catch (Exception ex)
+            {
+                return Response<IEnumerable<Account>>.AddError(nameof(Resources.SqlError), HttpStatusCode.InternalServerError, MethodBase.GetCurrentMethod().Name, printError: true, arguments: [ex.ToString()]);
+            }
         }
 
-        public IEnumerable<Account> GetAllAccounts()
+        public Response<Account> GetAccount(Guid uuid)
         {
-            return _dddContext.Accounts;
-        }
-
-        public Account GetAccount(Guid UUID)
-        {
-            return _dddContext.Accounts.Find(UUID);
+            try
+            {
+                return dddContext.Accounts.Find(uuid);
+            }
+            catch (Exception ex)
+            {
+                return Response<Account>.AddError(nameof(Resources.SqlError), HttpStatusCode.InternalServerError, MethodBase.GetCurrentMethod().Name, printError: true, arguments: [ex.ToString()]);
+            }
         }
 
         public Account FindAccountByEmail(string email)
         {
-            return _dddContext.Accounts.Where(x => x.Email == email).FirstOrDefault();
+            return dddContext.Accounts.Where(x => x.Email == email).FirstOrDefault();
         }
 
         public Account CreateAccount(string email, string password, string name, string surname, string title)
         {
             Account newAccount = new Account(email, password, name, surname, title);
 
-            _dddContext.Accounts.Add(newAccount);
-            _dddContext.SaveChanges();
+            dddContext.Accounts.Add(newAccount);
+            dddContext.SaveChanges();
             return newAccount;
         }
 
-        public Account UpdateAccount(Guid UUID, string email, string name, string surname, string title)
+        public Account UpdateAccount(Guid uuid, string email, string name, string surname, string title)
         {
-            Account modifiedAccount = _dddContext.Accounts.Find(UUID);
+            Account modifiedAccount = dddContext.Accounts.Find(uuid);
 
             modifiedAccount.Email = email;
             modifiedAccount.Name = name;
             modifiedAccount.Surname = surname;
             modifiedAccount.Title = title;
 
-            _dddContext.SaveChanges();
+            dddContext.SaveChanges();
             return modifiedAccount;
         }
 
-        public void DeleteAccount(Guid UUID)
+        public void DeleteAccount(Guid uuid)
         {
-            Account deletedAccount = _dddContext.Accounts.Find(UUID);
-            _dddContext.Accounts.Remove(deletedAccount);
-            _dddContext.SaveChanges();
+            Account deletedAccount = dddContext.Accounts.Find(uuid);
+            dddContext.Accounts.Remove(deletedAccount);
+            dddContext.SaveChanges();
         }
     }
 }
