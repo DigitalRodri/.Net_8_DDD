@@ -9,39 +9,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
 
-namespace Application.Controllers
+namespace ApplicationCore.Controllers
 {
     [ApiController]
     [Route("api/account")]
-    public class AccountController : ControllerBase
+    public class AccountController(IAccountService accountService, ILogger<AccountController> logger) : ControllerBase
     {
-        private readonly IAccountService _accountService;
-        private readonly ILogger _logger;
-
-        public AccountController(IAccountService accountService, ILogger<AccountController> logger)
-        {
-            _accountService = accountService;
-            _logger = logger;
-        }
 
         [Authorize]
         [HttpGet()]
         public IActionResult GetAllAccounts()
         {
-            Response<IEnumerable<AccountDto>> response = new Response<IEnumerable<AccountDto>>();
-
             try
             {
-                response = _accountService.GetAllAccounts();
+                Response<IEnumerable<AccountDto>> response = accountService.GetAllAccounts();
 
-                if (!response.Content.IsNullOrEmpty() && response.Content.Count() == 0) 
+                if (!response.Content.IsNullOrEmpty() && response.Content.Any())
                     return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
 
                 return response.CreateHttpResponse();
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
@@ -52,19 +42,19 @@ namespace Application.Controllers
         {
             try
             {
-                AccountDto accountDTO = _accountService.GetAccount(UUID);
+                var accountDto = accountService.GetAccount(UUID);
 
-                if (accountDTO == null) return NoContent();
-                return Ok(accountDTO);
+                if (accountDto == null) return NoContent();
+                return Ok(accountDto);
             }
             catch (ArgumentException ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetBadRequestErrorMessage());
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
@@ -75,64 +65,64 @@ namespace Application.Controllers
         {
             try
             {
-                AccountDto accountDTO = _accountService.CreateAccount(simpleAccountDto);
-                return Created(new Uri(Request.GetEncodedUrl() + "/" + accountDTO.UUID), accountDTO);
+                var accountDto = accountService.CreateAccount(simpleAccountDto);
+                return Created(new Uri(Request.GetEncodedUrl() + "/" + accountDto.UUID), accountDto);
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning(ex.ToString());
+                logger.LogWarning(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetBadRequestErrorMessage());
             }
             catch (DuplicateNameException ex)
             {
-                _logger.LogWarning(ex.ToString());
+                logger.LogWarning(ex.ToString());
                 return Conflict(ex);
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
         [Authorize]
-        [HttpPut("{UUID}")]
-        public ActionResult<AccountDto> UpdateAccount(Guid UUID, UpdateAccountDto updateAccountDto)
+        [HttpPut("{uuid}")]
+        public ActionResult<AccountDto> UpdateAccount(Guid uuid, UpdateAccountDto updateAccountDto)
         {
             try
             {
-                AccountDto modifiedAccount = _accountService.UpdateAccount(UUID, updateAccountDto);
+                var modifiedAccount = accountService.UpdateAccount(uuid, updateAccountDto);
                 return Ok(modifiedAccount);
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning(ex.ToString());
+                logger.LogWarning(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetBadRequestErrorMessage());
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
 
         [Authorize]
-        [HttpDelete("{UUID}")]
-        public IActionResult DeleteAccount(Guid UUID)
+        [HttpDelete("{uuid}")]
+        public IActionResult DeleteAccount(Guid uuid)
         {
             try
             {
-                _accountService.DeleteAccount(UUID);
+                accountService.DeleteAccount(uuid);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning(ex.ToString());
+                logger.LogWarning(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetBadRequestErrorMessage());
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }
@@ -142,21 +132,21 @@ namespace Application.Controllers
         public ActionResult<string> Authenticate(AuthenticationDto authenticationDto)
         {
             try
-            {  
-                string result = _accountService.Authenticate(authenticationDto);
+            {
+                var result = accountService.Authenticate(authenticationDto);
 
-                if (String.IsNullOrEmpty(result))
+                if (string.IsNullOrEmpty(result))
                     return Unauthorized(Resources.IncorrectPassword);
                 return Ok(result);
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning(ex.ToString());
+                logger.LogWarning(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetBadRequestErrorMessage());
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex.ToString());
+                logger.LogCritical(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, LoggerHelper.GetInternalServerErrorMessage());
             }
         }

@@ -1,4 +1,4 @@
-using Application.Controllers;
+using ApplicationCore.Controllers;
 using Domain.DTOs;
 using Domain.Interfaces;
 using Domain.Resources;
