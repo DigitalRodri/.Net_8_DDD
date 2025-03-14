@@ -2,7 +2,6 @@
 using Domain.DTOs;
 using Domain.Helpers;
 using Domain.Interfaces;
-using Domain.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -130,11 +129,9 @@ namespace ApplicationCore.Controllers
         {
             try
             {
-                var result = accountService.Authenticate(authenticationDto);
+                Response<string> result = accountService.Authenticate(authenticationDto);
 
-                if (string.IsNullOrEmpty(result))
-                    return Unauthorized(Resources.IncorrectPassword);
-                return Ok(result);
+                return result.CreateHttpResponse();
             }
             catch (ArgumentException ex)
             {

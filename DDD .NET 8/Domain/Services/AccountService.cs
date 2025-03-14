@@ -23,11 +23,9 @@ namespace Domain.Services
 
         public Response<IEnumerable<AccountDto>> GetAllAccounts()
         {
-            Response<IEnumerable<Account>> accountList = _accountRepository.GetAllAccounts();
-            if (accountList.HasError)
-                return Response<IEnumerable<AccountDto>>.AddError(accountList.Errors);
+            IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
 
-            var accountListDto = _autoMapper.Map<IEnumerable<AccountDto>>(accountList.Content);
+            var accountListDto = _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
             return Response<IEnumerable<AccountDto>>.AddContent(accountListDto);
         }
 
@@ -48,8 +46,8 @@ namespace Domain.Services
         {
             ValidateSimpleAccountDto(simpleAccountDto);
 
-            Account existingAccount = _accountRepository.FindAccountByEmail(simpleAccountDto.Email);
-            if (existingAccount != null) throw new DuplicateNameException(String.Format(Resources.Resources.AccountAlreadyExists, simpleAccountDto.Email));
+            Response<Account> existingAccount = _accountRepository.FindAccountByEmail(simpleAccountDto.Email);
+            if (existingAccount.Content != null) throw new DuplicateNameException(String.Format(Resources.Resources.AccountAlreadyExists, simpleAccountDto.Email));
 
             string hashedPassword = _authorizationHelper.Hash(simpleAccountDto.Password);
 
@@ -79,14 +77,20 @@ namespace Domain.Services
             return;
         }
 
-        public string Authenticate(AuthenticationDto authenticationDto)
+        public Response<string> Authenticate(AuthenticationDto authenticationDto)
         {
-            ValidateAuthenticationDto(authenticationDto);
-            Account existingAccount = ValidateExistingAccount(authenticationDto);
+            Response<bool> validation = ValidateAuthenticationDto(authenticationDto);
+            if (validation.HasError)
+                return Response<string>.AddError(validation.Errors);
 
-            if (_authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Password))
+            Response<Account> existingAccount = ValidateExistingAccount(authenticationDto);
+            if (existingAccount.HasError)
+                return Response<string>.AddError(existingAccount.Errors);
+
+            if (_authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Content.Password))
                 return _authorizationHelper.GenerateJwtToken();
-            else return string.Empty;
+
+            return Response<string>.AddError(nameof(Resources.Resources.IncorrectPassword), HttpStatusCode.Unauthorized);
         }
 
         #region Private methods
@@ -128,20 +132,20 @@ namespace Domain.Services
                 throw new ArgumentException(String.Format(Resources.Resources.TitleLengthError, updateAccountDto.Title));
         }
 
-        private static void ValidateAuthenticationDto(AuthenticationDto authenticationDto)
+        private static Response<bool> ValidateAuthenticationDto(AuthenticationDto authenticationDto)
         {
             if (string.IsNullOrEmpty(authenticationDto.Email))
-                throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(authenticationDto.Email)));
+                return Response<bool>.AddError(nameof(Resources.Resources.NullOrEmptyParameter), HttpStatusCode.BadRequest, arguments: ["Email"]);
             if (string.IsNullOrEmpty(authenticationDto.Password))
-                throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(authenticationDto.Password)));
+                return Response<bool>.AddError(nameof(Resources.Resources.NullOrEmptyParameter), HttpStatusCode.BadRequest, arguments: ["Password"]);
+            return Response<bool>.AddContent(true);
         }
 
-        private Account ValidateExistingAccount(AuthenticationDto authenticationDto)
+        private Response<Account> ValidateExistingAccount(AuthenticationDto authenticationDto)
         {
             Account existingAccount = _accountRepository.FindAccountByEmail(authenticationDto.Email);
-            if (existingAccount == null)
-                throw new ArgumentException(String.Format(Resources.Resources.AccountDoesNotExist, authenticationDto.Email));
-            return existingAccount;
+
+            return existingAccount ?? Response<Account>.AddError(nameof(Resources.Resources.AccountDoesNotExist), HttpStatusCode.BadRequest, arguments: ["Email"]);
         }
 
         #endregion

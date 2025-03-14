@@ -10,6 +10,6 @@ namespace Domain.Interfaces
         AccountDto UpdateAccount(Guid UUID, UpdateAccountDto updateAccountDto);
         void DeleteAccount(Guid UUID);
         Response<IEnumerable<AccountDto>> GetAllAccounts();
-        string Authenticate(AuthenticationDto authenticationDto);
+        Response<string> Authenticate(AuthenticationDto authenticationDto);
     }
 }

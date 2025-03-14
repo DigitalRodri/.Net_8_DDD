@@ -10,7 +10,7 @@
         ///</Summary>
         public static string GetInternalServerErrorMessage()
         {
-            return "Exception ocurred. Please check logs for more information.";
+            return "Exception occurred. Please check logs for more information.";
         }
 
         ///<Summary>

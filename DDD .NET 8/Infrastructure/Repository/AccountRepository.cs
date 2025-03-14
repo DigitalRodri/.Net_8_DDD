@@ -1,43 +1,39 @@
 ﻿using Domain.Entities;
-using Domain.Helpers;
 using Domain.Interfaces;
-using Domain.Resources;
 using Infrastructure.Repository.Models;
-using System.Net;
-using System.Reflection;
 
 namespace Infrastructure.Repository
 {
     public class AccountRepository(DDDContext dddContext) : IAccountRepository
     {
-        public Response<IEnumerable<Account>> GetAllAccounts()
+        public IEnumerable<Account> GetAllAccounts()
         {
-            try
-            {
-                return dddContext.Accounts;
-            }
-            catch (Exception ex)
-            {
-                return Response<IEnumerable<Account>>.AddError(nameof(Resources.SqlError), HttpStatusCode.InternalServerError, MethodBase.GetCurrentMethod().Name, printError: true, arguments: [ex.ToString()]);
-            }
+            return dddContext.Accounts;
         }
 
-        public Response<Account> GetAccount(Guid uuid)
+        public Account GetAccount(Guid uuid)
         {
-            try
-            {
-                return dddContext.Accounts.Find(uuid);
-            }
-            catch (Exception ex)
-            {
-                return Response<Account>.AddError(nameof(Resources.SqlError), HttpStatusCode.InternalServerError, MethodBase.GetCurrentMethod().Name, printError: true, arguments: [ex.ToString()]);
-            }
+            return dddContext.Accounts.Find(uuid);
         }
 
         public Account FindAccountByEmail(string email)
         {
-            return dddContext.Accounts.Where(x => x.Email == email).FirstOrDefault();
+            return dddContext.Accounts.FirstOrDefault(x => x.Email == email);
         }
+
+        //public Response<Account> FindAccountByEmail(string email)
+        //{
+
+        //    try
+        //    {
+        //        return dddContext.Accounts.FirstOrDefault(x => x.Email == email);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return Response<Account>.AddError(nameof(Resources.SqlError), HttpStatusCode.InternalServerError, MethodBase.GetCurrentMethod().Name, printError: true, arguments: [ex.ToString()]);
+        //    }
+        //}
 
         public Account CreateAccount(string email, string password, string name, string surname, string title)
         {
