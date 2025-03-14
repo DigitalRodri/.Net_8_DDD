@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Net;
 using System.Reflection;
 using System.Resources;
+using ILogger = Serilog.ILogger;
 
 namespace Domain.Helpers
 {
     public class Response<T>
     {
-        private readonly ILogger _logger;
-        private readonly List<Error> _errorList = new List<Error>();
+        private readonly ILogger _logger = Log.ForContext<Response<T>>();
+        private readonly List<Error> _errorList = [];
 
         public T Content { get; }
         public IEnumerable<Error> Errors => _errorList.AsReadOnly();
@@ -20,13 +21,17 @@ namespace Domain.Helpers
             Content = content;
         }
 
-        private Response(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = true, string[] arguments = null)
+        private Response(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null)
         {
             ResourceManager resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
 
             var errorMessage = resourceManager.GetString(errorName);
             var error = new Error(errorName, errorMessage, httpStatusCode, callerMemberName, arguments);
             _errorList.Add(error);
+
+            if (printError)
+                _logger.Error(error.ToString());
+
         }
 
         private Response(IEnumerable<Error> errors)
@@ -38,7 +43,7 @@ namespace Domain.Helpers
 
         public static implicit operator Response<T>(T content) => AddContent(content);
 
-        public static Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = true, string[] arguments = null) => new(errorName, httpStatusCode, callerMemberName, printError, arguments);
+        public static Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null) => new(errorName, httpStatusCode, callerMemberName, printError, arguments);
 
         public static Response<T> AddError(IEnumerable<Error> errors) => new(errors);
 

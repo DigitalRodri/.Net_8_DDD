@@ -1,3 +1,5 @@
+Remove authorize from CreateAccount
+
 {
     "Email": "accountController@integrationtest.com",
     "Name": "Name",

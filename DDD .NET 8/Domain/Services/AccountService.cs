@@ -90,7 +90,7 @@ namespace Domain.Services
             if (_authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Content.Password))
                 return _authorizationHelper.GenerateJwtToken();
 
-            return Response<string>.AddError(nameof(Resources.Resources.IncorrectPassword), HttpStatusCode.Unauthorized);
+            return Response<string>.AddError(nameof(Resources.Resources.IncorrectPassword), HttpStatusCode.Unauthorized, printError: true);
         }
 
         #region Private methods

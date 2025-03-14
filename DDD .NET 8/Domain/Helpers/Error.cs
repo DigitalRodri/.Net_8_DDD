@@ -1,25 +1,23 @@
-﻿using System.Net;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Net;
 
 namespace Domain.Helpers
 {
-    public class Error
+    public class Error(
+        string errorName,
+        string errorMessage,
+        HttpStatusCode httpStatusCode,
+        string callerFunction,
+        string[] arguments)
     {
-        public HttpStatusCode HttpStatusCode { get; set; }
-        public string ErrorName { get; set; }
-        public string ErrorMessage { get; set; }
-        public string CallerFunction { get; set; }
-
-        public Error(string errorName, string errorMessage, HttpStatusCode httpStatusCode, string callerFunction, string[] arguments)
-        {
-            HttpStatusCode = httpStatusCode;
-            ErrorMessage = string.Format(errorMessage, arguments);
-            ErrorName = errorName;
-            CallerFunction = callerFunction;
-        }
+        public HttpStatusCode HttpStatusCode { get; set; } = httpStatusCode;
+        public string ErrorName { get; set; } = errorName;
+        public string ErrorMessage { get; set; } = arguments.IsNullOrEmpty() ? errorMessage : string.Format(errorMessage, arguments);
+        public string CallerFunction { get; set; } = callerFunction;
 
         public override string ToString()
         {
-            return $"HttpStatusCode: {HttpStatusCode} -- {ErrorName} in {CallerFunction} -- {ErrorMessage}";
+            return arguments.IsNullOrEmpty() ? $"HttpStatusCode: {HttpStatusCode} -- {ErrorName}: {ErrorMessage}" : $"HttpStatusCode: {HttpStatusCode} -- {ErrorName} in {CallerFunction}: {ErrorMessage}";
         }
     }
 }
