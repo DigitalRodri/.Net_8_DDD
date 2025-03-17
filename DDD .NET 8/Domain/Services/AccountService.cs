@@ -8,24 +8,17 @@ using System.Net;
 
 namespace Domain.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService(
+        IAccountRepository accountRepository,
+        IAuthorizationHelper authorizationHelper,
+        IMapper mapper)
+        : IAccountService
     {
-        private readonly IAccountRepository _accountRepository;
-        private readonly IAuthorizationHelper _authorizationHelper;
-        private readonly IMapper _autoMapper;
-
-        public AccountService(IAccountRepository accountRepository, IAuthorizationHelper authorizationHelper, IMapper mapper)
-        {
-            _accountRepository = accountRepository;
-            _authorizationHelper = authorizationHelper;
-            _autoMapper = mapper;
-        }
-
         public Response<IEnumerable<AccountDto>> GetAllAccounts()
         {
-            IEnumerable<Account> accountList = _accountRepository.GetAllAccounts();
+            IEnumerable<Account> accountList = accountRepository.GetAllAccounts();
 
-            var accountListDto = _autoMapper.Map<IEnumerable<AccountDto>>(accountList);
+            var accountListDto = mapper.Map<IEnumerable<AccountDto>>(accountList);
             return Response<IEnumerable<AccountDto>>.AddContent(accountListDto);
         }
 
@@ -35,26 +28,26 @@ namespace Domain.Services
             if (uuidValidation.HasError)
                 return Response<AccountDto>.AddError(uuidValidation.Errors);
 
-            Response<Account> account = _accountRepository.GetAccount(UUID);
+            Response<Account> account = accountRepository.GetAccount(UUID);
             if (account.HasError)
                 return Response<AccountDto>.AddError(account.Errors);
 
-            return _autoMapper.Map<AccountDto>(account.Content);
+            return mapper.Map<AccountDto>(account.Content);
         }
 
         public AccountDto CreateAccount(SimpleAccountDto simpleAccountDto)
         {
             ValidateSimpleAccountDto(simpleAccountDto);
 
-            Response<Account> existingAccount = _accountRepository.FindAccountByEmail(simpleAccountDto.Email);
+            Response<Account> existingAccount = accountRepository.FindAccountByEmail(simpleAccountDto.Email);
             if (existingAccount.Content != null) throw new DuplicateNameException(String.Format(Resources.Resources.AccountAlreadyExists, simpleAccountDto.Email));
 
-            string hashedPassword = _authorizationHelper.Hash(simpleAccountDto.Password);
+            string hashedPassword = authorizationHelper.Hash(simpleAccountDto.Password);
 
-            Account account = _accountRepository
+            Account account = accountRepository
                 .CreateAccount(simpleAccountDto.Email, hashedPassword, simpleAccountDto.Name, simpleAccountDto.Surname, simpleAccountDto.Title);
 
-            return _autoMapper.Map<AccountDto>(account);
+            return mapper.Map<AccountDto>(account);
         }
 
         public AccountDto UpdateAccount(Guid UUID, UpdateAccountDto updateAccountDto)
@@ -62,17 +55,17 @@ namespace Domain.Services
             ValidateUUID(UUID);
             ValidateUpdateAccountDto(updateAccountDto);
 
-            Account modifiedAccount = _accountRepository
+            Account modifiedAccount = accountRepository
                 .UpdateAccount(UUID, updateAccountDto.Email, updateAccountDto.Name, updateAccountDto.Surname, updateAccountDto.Title);
 
-            return _autoMapper.Map<AccountDto>(modifiedAccount);
+            return mapper.Map<AccountDto>(modifiedAccount);
         }
 
         public void DeleteAccount(Guid UUID)
         {
             ValidateUUID(UUID);
 
-            _accountRepository.DeleteAccount(UUID);
+            accountRepository.DeleteAccount(UUID);
 
             return;
         }
@@ -87,8 +80,8 @@ namespace Domain.Services
             if (existingAccount.HasError)
                 return Response<string>.AddError(existingAccount.Errors);
 
-            if (_authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Content.Password))
-                return _authorizationHelper.GenerateJwtToken();
+            if (authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Content.Password))
+                return authorizationHelper.GenerateJwtToken();
 
             return Response<string>.AddError(nameof(Resources.Resources.IncorrectPassword), HttpStatusCode.Unauthorized, printError: true);
         }
@@ -143,7 +136,7 @@ namespace Domain.Services
 
         private Response<Account> ValidateExistingAccount(AuthenticationDto authenticationDto)
         {
-            Account existingAccount = _accountRepository.FindAccountByEmail(authenticationDto.Email);
+            Account existingAccount = accountRepository.FindAccountByEmail(authenticationDto.Email);
 
             return existingAccount ?? Response<Account>.AddError(nameof(Resources.Resources.AccountDoesNotExist), HttpStatusCode.BadRequest, arguments: ["Email"]);
         }
