@@ -12,7 +12,6 @@ namespace ApplicationCore.Controllers
     public class TestController(ITestService testService, ILogger<TestController> logger) : ControllerBase
     {
 
-        [Authorize]
         [HttpGet("{uuid}")]
         public ActionResult<AccountDto> GetAccountTest(Guid uuid)
         {
@@ -28,7 +27,6 @@ namespace ApplicationCore.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("exception/{uuid}")]
         public ActionResult<AccountDto> GetAccountExceptionTest(Guid uuid)
         {
