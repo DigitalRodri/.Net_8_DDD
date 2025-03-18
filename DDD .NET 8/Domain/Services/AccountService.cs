@@ -26,18 +26,24 @@ namespace Domain.Services
         {
             Response<bool> uuidValidation = ValidateUuid(UUID);
             if (uuidValidation.HasError)
-                return Response<AccountDto>.AddError(uuidValidation.Errors);
+                return Response<AccountDto>.AddError(uuidValidation.Error);
 
             Response<Account> account = accountRepository.GetAccount(UUID);
             if (account.HasError)
-                return Response<AccountDto>.AddError(account.Errors);
+                return Response<AccountDto>.AddError(account.Error);
+
+            // Check if there is no account
+
+
+            //if (response.Content == null)
+            //    return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
 
             return mapper.Map<AccountDto>(account.Content);
         }
 
         public AccountDto CreateAccount(SimpleAccountDto simpleAccountDto)
         {
-            ValidateSimpleAccountDto(simpleAccountDto);
+            ValidateSimpleAccountDtoOrFail(simpleAccountDto);
 
             Response<Account> existingAccount = accountRepository.FindAccountByEmail(simpleAccountDto.Email);
             if (existingAccount.Content != null) throw new DuplicateNameException(String.Format(Resources.Resources.AccountAlreadyExists, simpleAccountDto.Email));
@@ -53,7 +59,7 @@ namespace Domain.Services
         public AccountDto UpdateAccount(Guid UUID, UpdateAccountDto updateAccountDto)
         {
             ValidateUUID(UUID);
-            ValidateUpdateAccountDto(updateAccountDto);
+            ValidateUpdateAccountDtoOrFail(updateAccountDto);
 
             Account modifiedAccount = accountRepository
                 .UpdateAccount(UUID, updateAccountDto.Email, updateAccountDto.Name, updateAccountDto.Surname, updateAccountDto.Title);
@@ -74,11 +80,11 @@ namespace Domain.Services
         {
             Response<bool> validation = ValidateAuthenticationDto(authenticationDto);
             if (validation.HasError)
-                return Response<string>.AddError(validation.Errors);
+                return Response<string>.AddError(validation.Error);
 
             Response<Account> existingAccount = ValidateExistingAccount(authenticationDto);
             if (existingAccount.HasError)
-                return Response<string>.AddError(existingAccount.Errors);
+                return Response<string>.AddError(existingAccount.Error);
 
             if (authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Content.Password))
                 return authorizationHelper.GenerateJwtToken();
@@ -99,7 +105,7 @@ namespace Domain.Services
                 throw new ArgumentException(String.Format(Resources.Resources.NullParameter, nameof(UUID)));
         }
 
-        private static void ValidateSimpleAccountDto(SimpleAccountDto simpleAccountDto)
+        private static void ValidateSimpleAccountDtoOrFail(SimpleAccountDto simpleAccountDto)
         {
             if (string.IsNullOrEmpty(simpleAccountDto.Email))
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(simpleAccountDto.Email)));
@@ -113,7 +119,7 @@ namespace Domain.Services
                 throw new ArgumentException(String.Format(Resources.Resources.TitleLengthError, simpleAccountDto.Title));
         }
 
-        private static void ValidateUpdateAccountDto(UpdateAccountDto updateAccountDto)
+        private static void ValidateUpdateAccountDtoOrFail(UpdateAccountDto updateAccountDto)
         {
             if (string.IsNullOrEmpty(updateAccountDto.Email))
                 throw new ArgumentException(String.Format(Resources.Resources.NullOrEmptyParameter, nameof(updateAccountDto.Email)));

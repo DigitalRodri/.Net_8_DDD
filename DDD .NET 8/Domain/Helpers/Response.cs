@@ -10,11 +10,10 @@ namespace Domain.Helpers
     public class Response<T>
     {
         private readonly ILogger _logger = Log.ForContext<Response<T>>();
-        private readonly List<Error> _errorList = [];
 
         public T Content { get; }
-        public IEnumerable<Error> Errors => _errorList.AsReadOnly();
-        public bool HasError => _errorList.Any();
+        public Error Error { get; }
+        public bool HasError => Error != null;
 
         private Response(T content)
         {
@@ -23,40 +22,39 @@ namespace Domain.Helpers
 
         private Response(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null)
         {
-            ResourceManager resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
+            var resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
 
             var errorMessage = resourceManager.GetString(errorName);
-            var error = new Error(errorName, errorMessage, httpStatusCode, callerMemberName, arguments);
-            _errorList.Add(error);
+            Error = new Error(errorName, errorMessage, httpStatusCode, callerMemberName, arguments);
 
             if (printError)
-                _logger.Error(error.ToString());
+                _logger.Error(Error.ToString());
 
         }
 
-        private Response(IEnumerable<Error> errors)
+        private Response(Error error)
         {
-            _errorList.AddRange(errors);
+            Error = error;
         }
 
         public static Response<T> AddContent(T content) => new(content);
 
         public static implicit operator Response<T>(T content) => AddContent(content);
 
-        public static Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null) => new(errorName, httpStatusCode, callerMemberName, printError, arguments);
+        public static Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null)
+            => new(errorName, httpStatusCode, callerMemberName, printError, arguments);
 
-        public static Response<T> AddError(IEnumerable<Error> errors) => new(errors);
+        public static Response<T> AddError(Error error) => new(error);
 
         public ActionResult CreateHttpResponse(HttpStatusCode successHttpStatusCode = HttpStatusCode.OK)
         {
             if (HasError)
             {
-                var error = Errors.FirstOrDefault();
-                var responseError = new ResponseError(error);
+                var responseError = new ResponseError(Error);
 
                 return new ObjectResult(responseError)
                 {
-                    StatusCode = (int)error.HttpStatusCode
+                    StatusCode = (int)Error.HttpStatusCode
                 };
             }
 
