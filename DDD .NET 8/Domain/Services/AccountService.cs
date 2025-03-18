@@ -21,23 +21,15 @@ namespace Domain.Services
             return Response<IEnumerable<AccountDto>>.AddContent(accountListDto);
         }
 
-        public Response<AccountDto> GetAccount(Guid UUID)
+        public Response<AccountDto> GetAccount(Guid uuid)
         {
-            Response<bool> uuidValidation = ValidateUuid(UUID);
+            Response<bool> uuidValidation = ValidateUuid(uuid);
             if (uuidValidation.HasError)
                 return Response<AccountDto>.AddError(uuidValidation.Error);
 
-            Response<Account> account = accountRepository.GetAccount(UUID);
-            if (account.HasError)
-                return Response<AccountDto>.AddError(account.Error);
+            Account account = accountRepository.GetAccount(uuid);
 
-            // Check if there is no account
-
-
-            //if (response.Content == null)
-            //    return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
-
-            return mapper.Map<AccountDto>(account.Content);
+            return account == null ? Response<AccountDto>.AddError(nameof(Resources.Resources.AccountDoesNotExist), arguments: [uuid.ToString()]) : mapper.Map<AccountDto>(account);
         }
 
         public AccountDto CreateAccount(SimpleAccountDto simpleAccountDto)

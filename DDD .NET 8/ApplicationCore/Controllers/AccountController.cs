@@ -42,10 +42,6 @@ namespace ApplicationCore.Controllers
             try
             {
                 Response<AccountDto> response = accountService.GetAccount(uuid);
-
-                if (response.Content == null)
-                    return response.CreateHttpResponse(System.Net.HttpStatusCode.NoContent);
-
                 return response.CreateHttpResponse();
             }
             catch (Exception ex)
