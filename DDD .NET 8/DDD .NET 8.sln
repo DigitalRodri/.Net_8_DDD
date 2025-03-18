@@ -17,7 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		repo-test.js = repo-test.js
+		repo-test-exception.js = repo-test-exception.js
+		repo-test-result.js = repo-test-result.js
 	EndProjectSection
 EndProject
 Global

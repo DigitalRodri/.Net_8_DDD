@@ -15,16 +15,18 @@ namespace Domain.Helpers
         public Error Error { get; }
         public bool HasError => Error != null;
 
+        // Success constructor
         private Response(T content)
         {
             Content = content;
         }
 
+        // Error constructors
         private Response(string errorName, string callerMemberName = "", bool printError = false, string[] arguments = null)
         {
             var resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
-
             var errorMessage = resourceManager.GetString(errorName);
+
             Error = new Error(errorName, errorMessage, HttpStatusCode.NoContent, callerMemberName, arguments);
 
             if (printError)
@@ -36,6 +38,7 @@ namespace Domain.Helpers
             Error = error;
         }
 
+        // Public methods
         public static Response<T> AddContent(T content) => new(content);
 
         public static implicit operator Response<T>(T content) => AddContent(content);
@@ -45,6 +48,7 @@ namespace Domain.Helpers
 
         public static Response<T> AddError(Error error) => new(error);
 
+        // Helper methods
         public ActionResult CreateHttpResponse(HttpStatusCode successHttpStatusCode = HttpStatusCode.OK)
         {
             if (HasError)

@@ -14,7 +14,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Inject Serilog
-string logPath = Directory.GetParent(builder.Environment.ContentRootPath) + "\\Logs\\"+ builder.Environment.ApplicationName + "-.log";
+string logPath = Directory.GetParent(builder.Environment.ContentRootPath) + "\\Logs\\" + builder.Environment.ApplicationName + "-.log";
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
         path: logPath,
@@ -47,6 +47,7 @@ builder.Services.AddScoped<DDDContext>();
 
 // Dependency injection
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
 builder.Services.AddAutoMapper(typeof(AccountProfile));
@@ -54,9 +55,11 @@ var issuerSigningKey = Configuration["Keys:IssuerSigningKey"];
 var validIssuer = Configuration["Keys:ValidIssuer"];
 
 // JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg => {
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
+{
     cfg.IncludeErrorDetails = true;
-    cfg.TokenValidationParameters = new TokenValidationParameters {
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(issuerSigningKey)),
         ValidateIssuer = true,
