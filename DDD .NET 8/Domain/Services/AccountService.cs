@@ -4,7 +4,6 @@ using Domain.Entities;
 using Domain.Helpers;
 using Domain.Interfaces;
 using System.Data;
-using System.Net;
 
 namespace Domain.Services
 {
@@ -89,14 +88,14 @@ namespace Domain.Services
             if (authorizationHelper.ValidateHash(authenticationDto.Password, existingAccount.Content.Password))
                 return authorizationHelper.GenerateJwtToken();
 
-            return Response<string>.AddError(nameof(Resources.Resources.IncorrectPassword), HttpStatusCode.Unauthorized, printError: true);
+            return Response<string>.AddError(nameof(Resources.Resources.IncorrectPassword), printError: true);
         }
 
         #region Private methods
 
         private static Response<bool> ValidateUuid(Guid uuid)
         {
-            return uuid == Guid.Empty ? Response<bool>.AddError(nameof(Resources.Resources.NullParameter), HttpStatusCode.BadRequest, arguments: ["uuid"]) : Response<bool>.AddContent(true);
+            return uuid == Guid.Empty ? Response<bool>.AddError(nameof(Resources.Resources.NullParameter), arguments: ["uuid"]) : Response<bool>.AddContent(true);
         }
 
         private static void ValidateUUID(Guid UUID)
@@ -134,9 +133,9 @@ namespace Domain.Services
         private static Response<bool> ValidateAuthenticationDto(AuthenticationDto authenticationDto)
         {
             if (string.IsNullOrEmpty(authenticationDto.Email))
-                return Response<bool>.AddError(nameof(Resources.Resources.NullOrEmptyParameter), HttpStatusCode.BadRequest, arguments: ["Email"]);
+                return Response<bool>.AddError(nameof(Resources.Resources.NullOrEmptyParameter), arguments: ["Email"]);
             if (string.IsNullOrEmpty(authenticationDto.Password))
-                return Response<bool>.AddError(nameof(Resources.Resources.NullOrEmptyParameter), HttpStatusCode.BadRequest, arguments: ["Password"]);
+                return Response<bool>.AddError(nameof(Resources.Resources.NullOrEmptyParameter), arguments: ["Password"]);
             return Response<bool>.AddContent(true);
         }
 
@@ -144,7 +143,7 @@ namespace Domain.Services
         {
             Account existingAccount = accountRepository.FindAccountByEmail(authenticationDto.Email);
 
-            return existingAccount ?? Response<Account>.AddError(nameof(Resources.Resources.AccountDoesNotExist), HttpStatusCode.BadRequest, arguments: ["Email"]);
+            return existingAccount ?? Response<Account>.AddError(nameof(Resources.Resources.AccountDoesNotExist), arguments: ["Email"]);
         }
 
         #endregion

@@ -37,7 +37,7 @@ namespace Infrastructure.Repository
 
         public Account CreateAccount(string email, string password, string name, string surname, string title)
         {
-            Account newAccount = new Account(email, password, name, surname, title);
+            var newAccount = new Account(email, password, name, surname, title);
 
             dddContext.Accounts.Add(newAccount);
             dddContext.SaveChanges();

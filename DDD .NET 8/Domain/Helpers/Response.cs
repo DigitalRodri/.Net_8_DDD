@@ -20,16 +20,15 @@ namespace Domain.Helpers
             Content = content;
         }
 
-        private Response(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null)
+        private Response(string errorName, string callerMemberName = "", bool printError = false, string[] arguments = null)
         {
             var resourceManager = new ResourceManager("Domain.Resources.Resources", Assembly.GetExecutingAssembly());
 
             var errorMessage = resourceManager.GetString(errorName);
-            Error = new Error(errorName, errorMessage, httpStatusCode, callerMemberName, arguments);
+            Error = new Error(errorName, errorMessage, HttpStatusCode.NoContent, callerMemberName, arguments);
 
             if (printError)
                 _logger.Error(Error.ToString());
-
         }
 
         private Response(Error error)
@@ -41,8 +40,8 @@ namespace Domain.Helpers
 
         public static implicit operator Response<T>(T content) => AddContent(content);
 
-        public static Response<T> AddError(string errorName, HttpStatusCode httpStatusCode, string callerMemberName = "", bool printError = false, string[] arguments = null)
-            => new(errorName, httpStatusCode, callerMemberName, printError, arguments);
+        public static Response<T> AddError(string errorName, string callerMemberName = "", bool printError = false, string[] arguments = null)
+            => new(errorName, callerMemberName, printError, arguments);
 
         public static Response<T> AddError(Error error) => new(error);
 
