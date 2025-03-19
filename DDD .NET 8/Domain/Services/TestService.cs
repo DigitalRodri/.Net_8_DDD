@@ -28,6 +28,8 @@ namespace Domain.Services
             return uuid == Guid.Empty ? Response<bool>.AddError(nameof(Resources.Resources.NullParameter), arguments: ["uuid"]) : Response<bool>.AddContent(true);
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public AccountDto GetAccountException(Guid uuid)
         {
             {

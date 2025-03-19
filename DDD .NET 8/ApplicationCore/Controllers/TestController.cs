@@ -2,7 +2,6 @@
 using Domain.DTOs;
 using Domain.Helpers;
 using Domain.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApplicationCore.Controllers
@@ -32,8 +31,8 @@ namespace ApplicationCore.Controllers
         {
             try
             {
-                Response<AccountDto> response = testService.GetAccountException(uuid);
-                return response.CreateHttpResponse();
+                AccountDto response = testService.GetAccountException(uuid);
+                return Ok(response);
             }
             catch (Exception ex)
             {
